@@ -132,3 +132,8 @@
 - [x] Create audit log viewer page (admin only)
 - [x] Add filtering by user, action type, date range
 - [ ] Add export audit logs to CSV
+
+## Data Import
+- [x] Import September 2025 time entries from user-provided data
+- [x] Import October 2025 time entries from user-provided data
+- [x] Seed all default Swiss categories (GF, NRP, IC, IS, TP, SE, KI, SU)

@@ -1,0 +1,9 @@
+{
+  "query": "INSERT INTO categories (code, name, description) VALUES \n('NRP', 'Neue Regionalpolitik', 'NRP CSEM project activities'),\n('IC', 'Innovation Consulting', 'Innovation consulting services'),\n('IS', 'Innovation Support', 'Innovation support activities'),\n('TP', 'Technology Projects', 'Technology project work'),\n('SE', 'Software Engineering', 'Software engineering tasks'),\n('KI', 'Künstliche Intelligenz', 'AI and machine learning projects'),\n('SU', 'Support', 'Support and administrative tasks')",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user AwGvLACcNJJUAmU.2fefbe8204f3 --database Miyi8dMEHsq6BSut9VsF2X --execute INSERT INTO categories (code, name, description) VALUES \n('NRP', 'Neue Regionalpolitik', 'NRP CSEM project activities'),\n('IC', 'Innovation Consulting', 'Innovation consulting services'),\n('IS', 'Innovation Support', 'Innovation support activities'),\n('TP', 'Technology Projects', 'Technology project work'),\n('SE', 'Software Engineering', 'Software engineering tasks'),\n('KI', 'Künstliche Intelligenz', 'AI and machine learning projects'),\n('SU', 'Support', 'Support and administrative tasks')",
+  "rows": [],
+  "messages": [],
+  "stdout": "",
+  "stderr": "",
+  "execution_time_ms": 69
+}

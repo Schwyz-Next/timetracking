@@ -1,0 +1,62 @@
+{
+  "query": "SELECT DATE(date) as entry_date, COUNT(*) as count FROM timeEntries WHERE MONTH(date) IN (9, 10) AND YEAR(date) = 2025 GROUP BY DATE(date) HAVING count > 1",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user AwGvLACcNJJUAmU.2fefbe8204f3 --database Miyi8dMEHsq6BSut9VsF2X --execute SELECT DATE(date) as entry_date, COUNT(*) as count FROM timeEntries WHERE MONTH(date) IN (9, 10) AND YEAR(date) = 2025 GROUP BY DATE(date) HAVING count > 1",
+  "rows": [
+    {
+      "entry_date": "2025-09-16",
+      "count": "4"
+    },
+    {
+      "entry_date": "2025-09-24",
+      "count": "2"
+    },
+    {
+      "entry_date": "2025-09-17",
+      "count": "2"
+    },
+    {
+      "entry_date": "2025-09-15",
+      "count": "4"
+    },
+    {
+      "entry_date": "2025-09-22",
+      "count": "2"
+    },
+    {
+      "entry_date": "2025-09-09",
+      "count": "3"
+    },
+    {
+      "entry_date": "2025-09-28",
+      "count": "3"
+    },
+    {
+      "entry_date": "2025-09-30",
+      "count": "2"
+    },
+    {
+      "entry_date": "2025-09-10",
+      "count": "5"
+    },
+    {
+      "entry_date": "2025-10-30",
+      "count": "2"
+    },
+    {
+      "entry_date": "2025-09-25",
+      "count": "5"
+    },
+    {
+      "entry_date": "2025-09-18",
+      "count": "3"
+    },
+    {
+      "entry_date": "2025-09-29",
+      "count": "6"
+    }
+  ],
+  "messages": [],
+  "stdout": "entry_date\tcount\n2025-09-16\t4\n2025-09-24\t2\n2025-09-17\t2\n2025-09-15\t4\n2025-09-22\t2\n2025-09-09\t3\n2025-09-28\t3\n2025-09-30\t2\n2025-09-10\t5\n2025-10-30\t2\n2025-09-25\t5\n2025-09-18\t3\n2025-09-29\t6\n",
+  "stderr": "",
+  "execution_time_ms": 56
+}

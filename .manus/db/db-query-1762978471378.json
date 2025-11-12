@@ -1,0 +1,24 @@
+{
+  "query": "SELECT * FROM categories",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user AwGvLACcNJJUAmU.2fefbe8204f3 --database Miyi8dMEHsq6BSut9VsF2X --execute SELECT * FROM categories",
+  "rows": [
+    {
+      "id": "1",
+      "code": "GF",
+      "name": "Geschäftsführung",
+      "description": "",
+      "createdAt": "2025-11-12 15:26:36"
+    },
+    {
+      "id": "2",
+      "code": "CSEM",
+      "name": "NRP-CSEM",
+      "description": "",
+      "createdAt": "2025-11-12 15:27:17"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\tcode\tname\tdescription\tcreatedAt\n1\tGF\tGeschäftsführung\t\t2025-11-12 15:26:36\n2\tCSEM\tNRP-CSEM\t\t2025-11-12 15:27:17\n",
+  "stderr": "",
+  "execution_time_ms": 88
+}

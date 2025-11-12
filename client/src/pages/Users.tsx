@@ -280,34 +280,7 @@ export default function Users() {
         </AlertDialogContent>
       </AlertDialog>
 
-      <Card className="mt-6">
-        <CardHeader>
-          <CardTitle>Adding New Users</CardTitle>
-          <CardDescription>How to invite new team members</CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <p className="text-sm text-muted-foreground">
-            New users are automatically created when they sign in for the first time
-            using Manus OAuth. To add a new user:
-          </p>
-          <ol className="list-decimal list-inside space-y-2 text-sm text-muted-foreground">
-            <li>Share the application URL with the new user</li>
-            <li>Have them sign in with their Google/GitHub account</li>
-            <li>
-              Their account will be created automatically with "User" role
-            </li>
-            <li>You can then change their role to "Admin" if needed</li>
-          </ol>
-          <div className="bg-muted p-4 rounded-lg mt-4">
-            <p className="text-sm font-medium">Note about passwords:</p>
-            <p className="text-sm text-muted-foreground mt-1">
-              This application uses OAuth authentication (Google, GitHub, etc.). Users
-              don't have passwords to reset. Authentication is handled securely by the
-              OAuth provider.
-            </p>
-          </div>
-        </CardContent>
-      </Card>
+
     </div>
   );
 }

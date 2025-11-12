@@ -21,7 +21,7 @@ import {
 } from "@/components/ui/sidebar";
 import { APP_LOGO, APP_TITLE, getLoginUrl } from "@/const";
 import { useIsMobile } from "@/hooks/useMobile";
-import { LayoutDashboard, LogOut, PanelLeft, Users, Clock, FolderKanban, FileText, Settings } from "lucide-react";
+import { LayoutDashboard, LogOut, PanelLeft, Users, Clock, FolderKanban, FileText, Settings, FileSearch } from "lucide-react";
 import { CSSProperties, useEffect, useRef, useState } from "react";
 import { useLocation } from "wouter";
 import { DashboardLayoutSkeleton } from './DashboardLayoutSkeleton';
@@ -33,6 +33,7 @@ const menuItems = [
   { icon: FolderKanban, label: "Projects", path: "/projects" },
   { icon: FileText, label: "Invoices", path: "/invoices" },
   { icon: Users, label: "Users", path: "/users", adminOnly: true },
+  { icon: FileSearch, label: "Audit Logs", path: "/audit-logs", adminOnly: true },
   { icon: Settings, label: "Settings", path: "/settings" },
 ];
 

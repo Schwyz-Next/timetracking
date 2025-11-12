@@ -15,6 +15,13 @@
       "when": 1762953048077,
       "tag": "0001_bitter_gorgon",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1762977157021,
+      "tag": "0002_foamy_the_renegades",
+      "breakpoints": true
     }
   ]
 }

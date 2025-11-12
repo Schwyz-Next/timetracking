@@ -11,8 +11,12 @@ export const users = mysqlTable("users", {
    * Use this for relations between tables.
    */
   id: int("id").autoincrement().primaryKey(),
-  /** Manus OAuth identifier (openId) returned from the OAuth callback. Unique per user. */
-  openId: varchar("openId", { length: 64 }).notNull().unique(),
+  /** Manus OAuth identifier (openId) returned from the OAuth callback. Nullable for local users. */
+  openId: varchar("openId", { length: 64 }).unique(),
+  /** Username for local authentication. Nullable for OAuth users. */
+  username: varchar("username", { length: 100 }).unique(),
+  /** Hashed password for local authentication. Null for OAuth users. */
+  passwordHash: varchar("passwordHash", { length: 255 }),
   name: text("name"),
   email: varchar("email", { length: 320 }),
   loginMethod: varchar("loginMethod", { length: 64 }),
@@ -105,3 +109,20 @@ export const invoiceItems = mysqlTable("invoiceItems", {
 
 export type InvoiceItem = typeof invoiceItems.$inferSelect;
 export type InsertInvoiceItem = typeof invoiceItems.$inferInsert;
+
+// Audit logs table - tracks all important user actions for compliance and security
+export const auditLogs = mysqlTable("auditLogs", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId"), // User who performed the action (null for system actions)
+  action: varchar("action", { length: 100 }).notNull(), // e.g., "user.created", "role.changed", "time_entry.deleted"
+  entityType: varchar("entityType", { length: 50 }), // e.g., "user", "project", "time_entry"
+  entityId: int("entityId"), // ID of the affected entity
+  oldValue: text("oldValue"), // JSON string of old values
+  newValue: text("newValue"), // JSON string of new values
+  ipAddress: varchar("ipAddress", { length: 45 }), // IPv4 or IPv6
+  userAgent: text("userAgent"), // Browser/client information
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+export type AuditLog = typeof auditLogs.$inferSelect;
+export type InsertAuditLog = typeof auditLogs.$inferInsert;

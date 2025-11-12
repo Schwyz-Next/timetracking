@@ -11,6 +11,7 @@ import TimeEntries from "./pages/TimeEntries";
 import Settings from "./pages/Settings";
 import Invoices from "./pages/Invoices";
 import Users from "./pages/Users";
+import AuditLogs from "./pages/AuditLogs";
 
 function Router() {
   // make sure to consider if you need authentication for certain routes
@@ -22,6 +23,7 @@ function Router() {
       <Route path="/settings" component={Settings} />
       <Route path="/invoices" component={Invoices} />
       <Route path="/users" component={Users} />
+      <Route path="/audit-logs" component={AuditLogs} />
       <Route path={"/404"} component={NotFound} />
       {/* Final fallback route */}
       <Route component={NotFound} />

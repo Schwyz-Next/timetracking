@@ -37,6 +37,7 @@ import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
 import { Shield, User, Trash2, UserX, Clock, FileText } from "lucide-react";
 import { format } from "date-fns";
+import { AddLocalUserDialog } from "@/components/AddLocalUserDialog";
 
 export default function Users() {
   const [deleteUserId, setDeleteUserId] = useState<number | null>(null);
@@ -101,11 +102,14 @@ export default function Users() {
 
   return (
     <div className="container py-8">
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold">User Management</h1>
-        <p className="text-muted-foreground mt-2">
-          Manage user accounts and permissions
-        </p>
+      <div className="mb-8 flex items-center justify-between">
+        <div>
+          <h1 className="text-3xl font-bold">User Management</h1>
+          <p className="text-muted-foreground mt-2">
+            Manage user accounts and permissions
+          </p>
+        </div>
+        <AddLocalUserDialog />
       </div>
 
       <Card>

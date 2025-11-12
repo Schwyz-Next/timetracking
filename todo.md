@@ -111,3 +111,24 @@
 - [x] Implement role-based access control for user management
 - [x] Add Users menu item (visible only to admins)
 - [x] Prevent admins from demoting/deleting themselves
+
+## Local Authentication System
+- [x] Add password field to users table
+- [x] Implement password hashing with bcrypt
+- [x] Create local login endpoint (username/password)
+- [x] Create user creation form for admins (username/password)
+- [x] Add password reset functionality (admin can reset user passwords)
+- [ ] Update login page to support both OAuth and local auth
+- [ ] Distinguish between OAuth users and local users in UI
+- [x] Add password change functionality for local users
+
+## Activity Logging & Audit Trail
+- [x] Create audit_logs table (user_id, action, entity_type, entity_id, old_value, new_value, ip_address, timestamp)
+- [x] Log user role changes
+- [x] Log user creation/deletion
+- [ ] Log time entry creation/modification/deletion
+- [ ] Log project creation/modification
+- [ ] Log invoice generation
+- [x] Create audit log viewer page (admin only)
+- [x] Add filtering by user, action type, date range
+- [ ] Add export audit logs to CSV

@@ -1,0 +1,192 @@
+import { z } from "zod";
+import { protectedProcedure, router } from "../_core/trpc";
+import { getDb } from "../db";
+import { projects, timeEntries } from "../../drizzle/schema";
+import { eq, and, sql } from "drizzle-orm";
+
+export const projectsRouter = router({
+  // Get all projects with usage statistics
+  list: protectedProcedure
+    .input(
+      z.object({
+        year: z.number().optional(),
+        status: z.enum(["active", "archived"]).optional(),
+      })
+    )
+    .query(async ({ input }) => {
+      const db = await getDb();
+      if (!db) throw new Error("Database not available");
+      
+      let query = db.select().from(projects);
+      const conditions = [];
+
+      if (input.year) {
+        conditions.push(eq(projects.year, input.year));
+      }
+      if (input.status) {
+        conditions.push(eq(projects.status, input.status));
+      }
+
+      if (conditions.length > 0) {
+        query = query.where(and(...conditions)) as any;
+      }
+
+      const allProjects = await query;
+
+      // Get usage statistics for each project
+      const projectsWithUsage = await Promise.all(
+        allProjects.map(async (project: typeof projects.$inferSelect) => {
+          const usageResult = await db
+            .select({
+              totalHours: sql<number>`COALESCE(SUM(${timeEntries.durationHours}), 0)`,
+            })
+            .from(timeEntries)
+            .where(eq(timeEntries.projectId, project.id));
+
+          const totalHours = (usageResult[0]?.totalHours || 0) / 100; // Convert back from stored format
+          const quotaHours = project.totalQuotaHours;
+          const usagePercentage = quotaHours > 0 ? (totalHours / quotaHours) * 100 : 0;
+          const isWarning = usagePercentage >= project.warningThreshold;
+
+          return {
+            ...project,
+            usedHours: totalHours,
+            usagePercentage,
+            isWarning,
+          };
+        })
+      );
+
+      return projectsWithUsage;
+    }),
+
+  // Get a single project by ID
+  getById: protectedProcedure
+    .input(z.object({ id: z.number() }))
+    .query(async ({ input }) => {
+      const db = await getDb();
+      if (!db) throw new Error("Database not available");
+      
+      const project = await db
+        .select()
+        .from(projects)
+        .where(eq(projects.id, input.id))
+        .limit(1);
+
+      if (!project[0]) {
+        throw new Error("Project not found");
+      }
+
+      return project[0];
+    }),
+
+  // Create a new project
+  create: protectedProcedure
+    .input(
+      z.object({
+        name: z.string().min(1),
+        hourlyRate: z.number().min(0),
+        vatType: z.enum(["inclusive", "exclusive"]),
+        totalQuotaHours: z.number().min(0),
+        warningThreshold: z.number().min(0).max(100).default(80),
+        year: z.number().min(2020).max(2100),
+        status: z.enum(["active", "archived"]).default("active"),
+      })
+    )
+    .mutation(async ({ input }) => {
+      const db = await getDb();
+      if (!db) throw new Error("Database not available");
+      
+      const result = await db.insert(projects).values({
+        ...input,
+        hourlyRate: input.hourlyRate, // Store as-is (will be in CHF)
+      });
+
+      return { id: Number((result as any).insertId) };
+    }),
+
+  // Update an existing project
+  update: protectedProcedure
+    .input(
+      z.object({
+        id: z.number(),
+        name: z.string().min(1).optional(),
+        hourlyRate: z.number().min(0).optional(),
+        vatType: z.enum(["inclusive", "exclusive"]).optional(),
+        totalQuotaHours: z.number().min(0).optional(),
+        warningThreshold: z.number().min(0).max(100).optional(),
+        year: z.number().min(2020).max(2100).optional(),
+        status: z.enum(["active", "archived"]).optional(),
+      })
+    )
+    .mutation(async ({ input }) => {
+      const db = await getDb();
+      if (!db) throw new Error("Database not available");
+      
+      const { id, ...updateData } = input;
+
+      await db.update(projects).set(updateData).where(eq(projects.id, id));
+
+      return { success: true };
+    }),
+
+  // Delete a project
+  delete: protectedProcedure
+    .input(z.object({ id: z.number() }))
+    .mutation(async ({ input }) => {
+      const db = await getDb();
+      if (!db) throw new Error("Database not available");
+      
+      // Check if there are any time entries for this project
+      const entries = await db
+        .select()
+        .from(timeEntries)
+        .where(eq(timeEntries.projectId, input.id))
+        .limit(1);
+
+      if (entries.length > 0) {
+        throw new Error(
+          "Cannot delete project with existing time entries. Archive it instead."
+        );
+      }
+
+      await db.delete(projects).where(eq(projects.id, input.id));
+
+      return { success: true };
+    }),
+
+  // Clone a project for a new year
+  clone: protectedProcedure
+    .input(
+      z.object({
+        id: z.number(),
+        newYear: z.number().min(2020).max(2100),
+      })
+    )
+    .mutation(async ({ input }) => {
+      const db = await getDb();
+      if (!db) throw new Error("Database not available");
+      
+      const original = await db
+        .select()
+        .from(projects)
+        .where(eq(projects.id, input.id))
+        .limit(1);
+
+      if (!original[0]) {
+        throw new Error("Project not found");
+      }
+
+      const result = await db.insert(projects).values({
+        name: original[0].name,
+        hourlyRate: original[0].hourlyRate,
+        vatType: original[0].vatType,
+        totalQuotaHours: original[0].totalQuotaHours,
+        warningThreshold: original[0].warningThreshold,
+        year: input.newYear,
+        status: "active",
+      });
+
+      return { id: Number((result as any).insertId) };
+    }),
+});

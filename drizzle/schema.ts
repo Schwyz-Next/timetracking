@@ -25,4 +25,83 @@ export const users = mysqlTable("users", {
 export type User = typeof users.$inferSelect;
 export type InsertUser = typeof users.$inferInsert;
 
-// TODO: Add your tables here
+// Projects table - stores different project types with rates and quotas
+export const projects = mysqlTable("projects", {
+  id: int("id").autoincrement().primaryKey(),
+  name: varchar("name", { length: 255 }).notNull(),
+  hourlyRate: int("hourlyRate").notNull(), // Rate in CHF
+  vatType: mysqlEnum("vatType", ["inclusive", "exclusive"]).notNull(),
+  totalQuotaHours: int("totalQuotaHours").notNull(), // Total hours allowed for this project
+  warningThreshold: int("warningThreshold").default(80).notNull(), // Percentage threshold for warnings (e.g., 80%)
+  year: int("year").notNull(), // Project year (2025, 2026, etc.)
+  status: mysqlEnum("status", ["active", "archived"]).default("active").notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type Project = typeof projects.$inferSelect;
+export type InsertProject = typeof projects.$inferInsert;
+
+// Categories table - stores time entry categories (GF, NRP, IC, etc.)
+export const categories = mysqlTable("categories", {
+  id: int("id").autoincrement().primaryKey(),
+  code: varchar("code", { length: 10 }).notNull().unique(), // Short code like GF, NRP, IC
+  name: varchar("name", { length: 255 }).notNull(),
+  description: text("description"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+export type Category = typeof categories.$inferSelect;
+export type InsertCategory = typeof categories.$inferInsert;
+
+// Time entries table - stores individual time tracking entries
+export const timeEntries = mysqlTable("timeEntries", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(), // Reference to users table
+  projectId: int("projectId").notNull(), // Reference to projects table
+  categoryId: int("categoryId").notNull(), // Reference to categories table
+  date: timestamp("date").notNull(), // Date of the work
+  startTime: varchar("startTime", { length: 8 }), // HH:MM:SS format (optional)
+  endTime: varchar("endTime", { length: 8 }), // HH:MM:SS format (optional)
+  durationHours: int("durationHours").notNull(), // Duration in hours (multiplied by 100 for 2 decimal places, e.g., 150 = 1.5h)
+  description: text("description"), // Description of the work done
+  kilometers: int("kilometers"), // Optional kilometers traveled
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type TimeEntry = typeof timeEntries.$inferSelect;
+export type InsertTimeEntry = typeof timeEntries.$inferInsert;
+
+// Invoices table - stores generated invoices
+export const invoices = mysqlTable("invoices", {
+  id: int("id").autoincrement().primaryKey(),
+  invoiceNumber: varchar("invoiceNumber", { length: 50 }).notNull().unique(),
+  userId: int("userId").notNull(), // User who generated the invoice
+  month: int("month").notNull(), // 1-12
+  year: int("year").notNull(),
+  recipientName: varchar("recipientName", { length: 255 }).notNull(),
+  recipientAddress: text("recipientAddress"),
+  totalAmount: int("totalAmount").notNull(), // Total in CHF (multiplied by 100 for 2 decimal places)
+  status: mysqlEnum("status", ["draft", "sent", "paid"]).default("draft").notNull(),
+  pdfUrl: text("pdfUrl"), // S3 URL to the generated PDF
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type Invoice = typeof invoices.$inferSelect;
+export type InsertInvoice = typeof invoices.$inferInsert;
+
+// Invoice items table - stores line items for each invoice
+export const invoiceItems = mysqlTable("invoiceItems", {
+  id: int("id").autoincrement().primaryKey(),
+  invoiceId: int("invoiceId").notNull(), // Reference to invoices table
+  projectId: int("projectId").notNull(), // Reference to projects table
+  hours: int("hours").notNull(), // Hours worked (multiplied by 100 for 2 decimal places)
+  rate: int("rate").notNull(), // Hourly rate in CHF (multiplied by 100)
+  amount: int("amount").notNull(), // Total amount for this line item (multiplied by 100)
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+export type InvoiceItem = typeof invoiceItems.$inferSelect;
+export type InsertInvoiceItem = typeof invoiceItems.$inferInsert;

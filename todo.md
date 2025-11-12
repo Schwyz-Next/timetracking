@@ -152,3 +152,4 @@
 
 ## Time Entries Page Enhancements
 - [x] Add monthly summary section showing hours per project for selected month
+- [x] Fix quota indicator bar to show green when at quota but not over by more than 1h

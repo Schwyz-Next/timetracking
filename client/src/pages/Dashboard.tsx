@@ -102,7 +102,8 @@ export default function Dashboard() {
         message: `Over by ${overageHours.toFixed(2)}h`,
         icon: true,
       };
-    } else if (percentage >= warningThreshold) {
+    } else if (percentage >= warningThreshold && overageHours < 0) {
+      // Show orange only if at warning threshold AND still under quota
       return {
         color: "text-orange-600",
         bgColor: "bg-orange-100",

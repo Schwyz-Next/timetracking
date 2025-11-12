@@ -133,7 +133,7 @@ export default function Login() {
             className="w-full"
             onClick={handleOAuthLogin}
           >
-            Sign in with Manus OAuth
+            Sign in with OAuth
           </Button>
 
           {/* Footer */}

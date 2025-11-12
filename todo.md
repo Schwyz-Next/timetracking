@@ -70,7 +70,11 @@
 - [ ] Add data export to Excel format
 - [ ] Add data export to CSV format
 - [ ] Add PDF export for reports
-- [ ] Implement full database backup/restore
+- [x] Implement full database backup/restore
+- [x] Create backup script (pnpm db:backup)
+- [x] Create restore script (pnpm db:restore)
+- [x] Configure git to track latest backup
+- [x] Document backup/restore workflow
 
 ## UI/UX Enhancements
 - [x] Design clean, professional interface following Swiss quality standards

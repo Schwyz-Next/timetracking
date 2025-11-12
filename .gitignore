@@ -105,3 +105,10 @@ temp/
 *.db
 *.sqlite
 *.sqlite3
+
+# Database backups (timestamped backups excluded, latest kept)
+backups/backup-*.json
+!backups/latest.json
+
+# Drizzle snapshots
+drizzle/.push-snapshot.json

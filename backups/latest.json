@@ -1,0 +1,127 @@
+{
+  "version": "1.0",
+  "timestamp": "2025-11-12T19:12:21.698Z",
+  "tables": {
+    "users": [
+      {
+        "id": 1,
+        "openId": "E6jhQXxZCLGPSHKmBXUQ5i",
+        "name": "Vikram Bhatnagar",
+        "email": "vikram@vikram.io",
+        "loginMethod": "google",
+        "role": "admin",
+        "createdAt": "2025-11-12T13:13:10.000Z",
+        "updatedAt": "2025-11-12T19:12:12.000Z",
+        "lastSignedIn": "2025-11-12T19:12:13.000Z"
+      }
+    ],
+    "projects": [
+      {
+        "id": 1,
+        "name": "NRP CSEM",
+        "hourlyRate": 150,
+        "vatType": "inclusive",
+        "totalQuotaHours": 39,
+        "warningThreshold": 80,
+        "year": 2025,
+        "status": "active",
+        "createdAt": "2025-11-12T13:24:18.000Z",
+        "updatedAt": "2025-11-12T15:29:29.000Z"
+      },
+      {
+        "id": 30001,
+        "name": "Tag des Gründes mit IFJ",
+        "hourlyRate": 75,
+        "vatType": "inclusive",
+        "totalQuotaHours": 7,
+        "warningThreshold": 80,
+        "year": 2025,
+        "status": "active",
+        "createdAt": "2025-11-12T15:30:39.000Z",
+        "updatedAt": "2025-11-12T15:30:39.000Z"
+      },
+      {
+        "id": 30002,
+        "name": "Geschäftsführung",
+        "hourlyRate": 55,
+        "vatType": "inclusive",
+        "totalQuotaHours": 60,
+        "warningThreshold": 80,
+        "year": 2025,
+        "status": "active",
+        "createdAt": "2025-11-12T15:33:24.000Z",
+        "updatedAt": "2025-11-12T15:33:24.000Z"
+      }
+    ],
+    "categories": [
+      {
+        "id": 1,
+        "code": "GF",
+        "name": "Geschäftsführung",
+        "description": "",
+        "createdAt": "2025-11-12T15:26:36.000Z"
+      },
+      {
+        "id": 2,
+        "code": "CSEM",
+        "name": "NRP-CSEM",
+        "description": "",
+        "createdAt": "2025-11-12T15:27:17.000Z"
+      }
+    ],
+    "timeEntries": [
+      {
+        "id": 1,
+        "userId": 1,
+        "projectId": 30002,
+        "categoryId": 1,
+        "date": "2025-09-03T00:00:00.000Z",
+        "startTime": "07:50",
+        "endTime": "21:30",
+        "durationHours": 1367,
+        "description": "Onboarding, GMI, Event",
+        "kilometers": null,
+        "createdAt": "2025-11-12T15:39:22.000Z",
+        "updatedAt": "2025-11-12T15:39:22.000Z"
+      },
+      {
+        "id": 30001,
+        "userId": 1,
+        "projectId": 30002,
+        "categoryId": 1,
+        "date": "2025-09-04T00:00:00.000Z",
+        "startTime": "11:00",
+        "endTime": "17:00",
+        "durationHours": 600,
+        "description": "Ops meeting, impulsraum, Diverses",
+        "kilometers": null,
+        "createdAt": "2025-11-12T15:45:57.000Z",
+        "updatedAt": "2025-11-12T15:45:57.000Z"
+      },
+      {
+        "id": 30002,
+        "userId": 1,
+        "projectId": 30002,
+        "categoryId": 1,
+        "date": "2025-09-09T00:00:00.000Z",
+        "startTime": "09:00",
+        "endTime": "10:30",
+        "durationHours": 150,
+        "description": "Sync, Followup",
+        "kilometers": null,
+        "createdAt": "2025-11-12T15:46:48.000Z",
+        "updatedAt": "2025-11-12T16:09:08.000Z"
+      }
+    ],
+    "invoices": [],
+    "invoiceItems": []
+  },
+  "stats": {
+    "users": 1,
+    "projects": 3,
+    "categories": 2,
+    "timeEntries": 3,
+    "invoices": 0,
+    "invoiceItems": 0
+  }
+}

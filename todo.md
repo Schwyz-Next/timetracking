@@ -100,3 +100,14 @@
 - [ ] Create admin guide for project management
 - [ ] Save checkpoint for deployment
 - [ ] Deploy application
+
+## User Management (Admin Only)
+- [x] Create user management page (admin only)
+- [x] Display list of all users with their roles
+- [x] Add ability to change user roles (admin/user)
+- [x] Add ability to deactivate/delete users
+- [x] Show user statistics (total hours, projects, entries)
+- [x] Add user invitation system (via OAuth auto-creation)
+- [x] Implement role-based access control for user management
+- [x] Add Users menu item (visible only to admins)
+- [x] Prevent admins from demoting/deleting themselves

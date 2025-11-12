@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "timestamp": "2025-11-12T19:12:21.698Z",
+  "timestamp": "2025-11-12T19:14:51.174Z",
   "tables": {
     "users": [
       {
@@ -11,8 +11,8 @@
         "loginMethod": "google",
         "role": "admin",
         "createdAt": "2025-11-12T13:13:10.000Z",
-        "updatedAt": "2025-11-12T19:12:12.000Z",
-        "lastSignedIn": "2025-11-12T19:12:13.000Z"
+        "updatedAt": "2025-11-12T19:13:58.000Z",
+        "lastSignedIn": "2025-11-12T19:13:58.000Z"
       }
     ],
     "projects": [

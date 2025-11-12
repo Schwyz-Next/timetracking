@@ -3,6 +3,7 @@ import { protectedProcedure, router } from "../_core/trpc";
 import { getDb } from "../db";
 import { timeEntries, projects, categories, users } from "../../drizzle/schema";
 import { eq, and, gte, lte, desc, sql } from "drizzle-orm";
+import { auditLog } from "../auditLog";
 
 export const timeEntriesRouter = router({
   // Get all time entries with filters
@@ -179,7 +180,16 @@ export const timeEntriesRouter = router({
         kilometers: input.kilometers || null,
       });
 
-      return { id: Number((result as any).insertId) };
+      const entryId = Number((result as any).insertId);
+
+      // Audit log
+      await auditLog(ctx, "time_entry.created", {
+        entityType: "time_entry",
+        entityId: entryId,
+        newValue: { ...input, durationHours: durationHours / 100 },
+      });
+
+      return { id: entryId };
     }),
 
   // Update an existing time entry
@@ -255,6 +265,14 @@ export const timeEntriesRouter = router({
 
       await db.update(timeEntries).set(updates).where(eq(timeEntries.id, id));
 
+      // Audit log
+      await auditLog(ctx, "time_entry.updated", {
+        entityType: "time_entry",
+        entityId: id,
+        oldValue: existing[0],
+        newValue: updates,
+      });
+
       return { success: true };
     }),
 
@@ -281,6 +299,13 @@ export const timeEntriesRouter = router({
       }
 
       await db.delete(timeEntries).where(eq(timeEntries.id, input.id));
+
+      // Audit log
+      await auditLog(ctx, "time_entry.deleted", {
+        entityType: "time_entry",
+        entityId: input.id,
+        oldValue: existing[0],
+      });
 
       return { success: true };
     }),

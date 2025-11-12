@@ -118,7 +118,7 @@
 - [x] Create local login endpoint (username/password)
 - [x] Create user creation form for admins (username/password)
 - [x] Add password reset functionality (admin can reset user passwords)
-- [ ] Update login page to support both OAuth and local auth
+- [x] Create custom login page with username/password form and OAuth button
 - [ ] Distinguish between OAuth users and local users in UI
 - [x] Add password change functionality for local users
 
@@ -126,8 +126,8 @@
 - [x] Create audit_logs table (user_id, action, entity_type, entity_id, old_value, new_value, ip_address, timestamp)
 - [x] Log user role changes
 - [x] Log user creation/deletion
-- [ ] Log time entry creation/modification/deletion
-- [ ] Log project creation/modification
+- [x] Log time entry creation/modification/deletion
+- [x] Log project creation/modification
 - [ ] Log invoice generation
 - [x] Create audit log viewer page (admin only)
 - [x] Add filtering by user, action type, date range

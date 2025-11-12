@@ -3,6 +3,7 @@ import { protectedProcedure, router } from "../_core/trpc";
 import { getDb } from "../db";
 import { projects, timeEntries } from "../../drizzle/schema";
 import { eq, and, sql } from "drizzle-orm";
+import { auditLog } from "../auditLog";
 
 export const projectsRouter = router({
   // Get all projects with usage statistics
@@ -93,7 +94,7 @@ export const projectsRouter = router({
         status: z.enum(["active", "archived"]).default("active"),
       })
     )
-    .mutation(async ({ input }) => {
+    .mutation(async ({ input, ctx }) => {
       const db = await getDb();
       if (!db) throw new Error("Database not available");
       
@@ -102,7 +103,16 @@ export const projectsRouter = router({
         hourlyRate: input.hourlyRate, // Store as-is (will be in CHF)
       });
 
-      return { id: Number((result as any).insertId) };
+      const projectId = Number((result as any).insertId);
+
+      // Audit log
+      await auditLog(ctx, "project.created", {
+        entityType: "project",
+        entityId: projectId,
+        newValue: input,
+      });
+
+      return { id: projectId };
     }),
 
   // Update an existing project
@@ -119,13 +129,28 @@ export const projectsRouter = router({
         status: z.enum(["active", "archived"]).optional(),
       })
     )
-    .mutation(async ({ input }) => {
+    .mutation(async ({ input, ctx }) => {
       const db = await getDb();
       if (!db) throw new Error("Database not available");
       
       const { id, ...updateData } = input;
 
+      // Get old values for audit
+      const oldProject = await db
+        .select()
+        .from(projects)
+        .where(eq(projects.id, id))
+        .limit(1);
+
       await db.update(projects).set(updateData).where(eq(projects.id, id));
+
+      // Audit log
+      await auditLog(ctx, "project.updated", {
+        entityType: "project",
+        entityId: id,
+        oldValue: oldProject[0],
+        newValue: updateData,
+      });
 
       return { success: true };
     }),
@@ -133,7 +158,7 @@ export const projectsRouter = router({
   // Delete a project
   delete: protectedProcedure
     .input(z.object({ id: z.number() }))
-    .mutation(async ({ input }) => {
+    .mutation(async ({ input, ctx }) => {
       const db = await getDb();
       if (!db) throw new Error("Database not available");
       
@@ -150,7 +175,21 @@ export const projectsRouter = router({
         );
       }
 
+      // Get project details for audit
+      const project = await db
+        .select()
+        .from(projects)
+        .where(eq(projects.id, input.id))
+        .limit(1);
+
       await db.delete(projects).where(eq(projects.id, input.id));
+
+      // Audit log
+      await auditLog(ctx, "project.deleted", {
+        entityType: "project",
+        entityId: input.id,
+        oldValue: project[0],
+      });
 
       return { success: true };
     }),

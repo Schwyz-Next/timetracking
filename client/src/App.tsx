@@ -12,11 +12,13 @@ import Settings from "./pages/Settings";
 import Invoices from "./pages/Invoices";
 import Users from "./pages/Users";
 import AuditLogs from "./pages/AuditLogs";
+import Login from "./pages/Login";
 
 function Router() {
   // make sure to consider if you need authentication for certain routes
   return (
     <Switch>
+      <Route path="/login" component={Login} />
       <Route path={"/"} component={Dashboard} />
       <Route path="/projects" component={Projects} />
       <Route path="/time-entries" component={TimeEntries} />

@@ -93,7 +93,8 @@ export default function Dashboard() {
     const warningThreshold = project.warningThreshold || 80;
     const overageHours = project.usedHours - project.totalQuotaHours;
 
-    if (percentage >= 100) {
+    // Only show red if actually over by 1 hour or more
+    if (overageHours >= 1) {
       return {
         color: "text-red-600",
         bgColor: "bg-red-100",

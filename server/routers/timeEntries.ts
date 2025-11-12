@@ -315,7 +315,7 @@ export const timeEntriesRouter = router({
     .input(
       z.object({
         userId: z.number().optional(),
-        month: z.number().min(1).max(12).optional(),
+        month: z.number().min(0).max(12).optional(), // 0 means all months (annual)
         year: z.number().optional(),
       })
     )
@@ -332,11 +332,13 @@ export const timeEntriesRouter = router({
         conditions.push(eq(timeEntries.userId, input.userId));
       }
 
-      if (input.month && input.year) {
+      if (input.month && input.month > 0 && input.year) {
+        // Specific month and year
         conditions.push(
           sql`MONTH(${timeEntries.date}) = ${input.month} AND YEAR(${timeEntries.date}) = ${input.year}`
         );
       } else if (input.year) {
+        // Entire year (month=0 or not specified)
         conditions.push(sql`YEAR(${timeEntries.date}) = ${input.year}`);
       }
 

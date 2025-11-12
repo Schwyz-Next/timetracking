@@ -137,3 +137,9 @@
 - [x] Import September 2025 time entries from user-provided data
 - [x] Import October 2025 time entries from user-provided data
 - [x] Seed all default Swiss categories (GF, NRP, IC, IS, TP, SE, KI, SU)
+
+## Dashboard Enhancements
+- [x] Update quota color coding: green (within quota), orange (warning threshold), red (over quota with overage amount)
+- [x] Add month-by-month chart visualization
+- [x] Add last 3 months overview boxes
+- [x] Add annual overview summary box

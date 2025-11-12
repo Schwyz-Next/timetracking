@@ -32,8 +32,8 @@ import { Search, RefreshCw, FileText } from "lucide-react";
 
 export default function AuditLogs() {
   const [filters, setFilters] = useState({
-    action: "",
-    entityType: "",
+    action: "all",
+    entityType: "all",
     startDate: "",
     endDate: "",
   });
@@ -41,12 +41,20 @@ export default function AuditLogs() {
   const pageSize = 50;
 
   const { data: logs, isLoading, refetch } = trpc.auditLogs.list.useQuery({
-    ...filters,
+    action: filters.action === "all" ? "" : filters.action,
+    entityType: filters.entityType === "all" ? "" : filters.entityType,
+    startDate: filters.startDate,
+    endDate: filters.endDate,
     limit: pageSize,
     offset: page * pageSize,
   });
 
-  const { data: totalCount } = trpc.auditLogs.count.useQuery(filters);
+  const { data: totalCount } = trpc.auditLogs.count.useQuery({
+    action: filters.action === "all" ? "" : filters.action,
+    entityType: filters.entityType === "all" ? "" : filters.entityType,
+    startDate: filters.startDate,
+    endDate: filters.endDate,
+  });
 
   const handleFilterChange = (key: string, value: string) => {
     setFilters({ ...filters, [key]: value });
@@ -55,8 +63,8 @@ export default function AuditLogs() {
 
   const handleClearFilters = () => {
     setFilters({
-      action: "",
-      entityType: "",
+      action: "all",
+      entityType: "all",
       startDate: "",
       endDate: "",
     });
@@ -104,7 +112,7 @@ export default function AuditLogs() {
                     <SelectValue placeholder="All actions" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="">All actions</SelectItem>
+                    <SelectItem value="all">All actions</SelectItem>
                     <SelectItem value="user">User actions</SelectItem>
                     <SelectItem value="project">Project actions</SelectItem>
                     <SelectItem value="time_entry">Time entry actions</SelectItem>
@@ -124,7 +132,7 @@ export default function AuditLogs() {
                     <SelectValue placeholder="All types" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="">All types</SelectItem>
+                    <SelectItem value="all">All types</SelectItem>
                     <SelectItem value="user">User</SelectItem>
                     <SelectItem value="project">Project</SelectItem>
                     <SelectItem value="time_entry">Time Entry</SelectItem>

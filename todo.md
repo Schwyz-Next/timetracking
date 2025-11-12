@@ -149,3 +149,6 @@
 
 ## Bug Fixes
 - [x] Fix month filter showing September 30 entries in October filter (timezone issue resolved)
+
+## Time Entries Page Enhancements
+- [x] Add monthly summary section showing hours per project for selected month

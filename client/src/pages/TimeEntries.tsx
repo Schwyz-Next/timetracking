@@ -242,6 +242,41 @@ export default function TimeEntries() {
             </div>
           </CardHeader>
           <CardContent>
+            {/* Monthly Summary by Project */}
+            {entries && entries.length > 0 && (
+              <div className="mb-6 p-4 bg-muted/50 rounded-lg">
+                <h3 className="text-sm font-semibold mb-3">Monthly Summary</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+                  {(() => {
+                    const projectSummary = entries.reduce((acc, entry) => {
+                      const projectName = entry.project?.name || "Unknown";
+                      const hours = entry.entry.durationHours / 100;
+                      if (!acc[projectName]) {
+                        acc[projectName] = 0;
+                      }
+                      acc[projectName] += hours;
+                      return acc;
+                    }, {} as Record<string, number>);
+                    
+                    return Object.entries(projectSummary)
+                      .sort(([, a], [, b]) => b - a)
+                      .map(([projectName, hours]) => (
+                        <div key={projectName} className="flex justify-between items-center p-2 bg-background rounded border">
+                          <span className="font-medium text-sm">{projectName}</span>
+                          <span className="text-sm font-semibold">{hours.toFixed(2)}h</span>
+                        </div>
+                      ));
+                  })()}
+                </div>
+                <div className="mt-3 pt-3 border-t flex justify-between items-center">
+                  <span className="text-sm font-semibold">Total Hours</span>
+                  <span className="text-lg font-bold">
+                    {entries.reduce((sum, entry) => sum + (entry.entry.durationHours / 100), 0).toFixed(2)}h
+                  </span>
+                </div>
+              </div>
+            )}
+            
             {isLoading ? (
               <div className="text-center py-8 text-muted-foreground">
                 Loading entries...

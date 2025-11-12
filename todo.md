@@ -155,5 +155,5 @@
 - [x] Fix quota indicator bar to show green when at quota but not over by more than 1h
 
 ## UI Cleanup
-- [ ] Remove "Made with Manus" badge from bottom right (Note: Badge appears to be injected by Manus platform, not in codebase)
+- [x] Hide "Made with Manus" badge from bottom right using CSS
 - [x] Change OAuth button text to "Sign in with OAuth" on login page

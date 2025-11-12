@@ -175,3 +175,15 @@
     }
   }
 }
+/* Hide the "Made with Manus" badge injected by the platform */
+iframe[src*="manus"],
+a[href*="manus.im"],
+div[class*="manus-badge"],
+[data-manus-badge],
+button[aria-label*="Made with Manus"],
+a[aria-label*="Made with Manus"] {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}

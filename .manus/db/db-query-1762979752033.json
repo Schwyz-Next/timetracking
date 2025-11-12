@@ -1,0 +1,17 @@
+{
+  "query": "SELECT id, date, startTime, endTime, description FROM timeEntries WHERE description LIKE '%Startups%'",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user AwGvLACcNJJUAmU.2fefbe8204f3 --database Miyi8dMEHsq6BSut9VsF2X --execute SELECT id, date, startTime, endTime, description FROM timeEntries WHERE description LIKE '%Startups%'",
+  "rows": [
+    {
+      "id": "60066",
+      "date": "2025-09-30 00:00:00",
+      "startTime": "16:00",
+      "endTime": "19:00",
+      "description": "Sichtung und Beurteilung Startups ImR + com"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\tdate\tstartTime\tendTime\tdescription\n60066\t2025-09-30 00:00:00\t16:00\t19:00\tSichtung und Beurteilung Startups ImR + com\n",
+  "stderr": "",
+  "execution_time_ms": 55
+}

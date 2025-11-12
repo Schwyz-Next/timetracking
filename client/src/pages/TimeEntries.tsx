@@ -60,9 +60,10 @@ export default function TimeEntries() {
 
   const utils = trpc.useUtils();
   
-  // Calculate start and end dates for the selected month
-  const startDate = new Date(selectedYear, selectedMonth - 1, 1).toISOString().split('T')[0];
-  const endDate = new Date(selectedYear, selectedMonth, 0).toISOString().split('T')[0];
+  // Calculate start and end dates for the selected month (using UTC to avoid timezone issues)
+  const startDate = `${selectedYear}-${String(selectedMonth).padStart(2, '0')}-01`;
+  const lastDay = new Date(Date.UTC(selectedYear, selectedMonth, 0)).getUTCDate();
+  const endDate = `${selectedYear}-${String(selectedMonth).padStart(2, '0')}-${String(lastDay).padStart(2, '0')}`;
   
   const { data: entries, isLoading } = trpc.timeEntries.list.useQuery({
     startDate,

@@ -4,32 +4,22 @@ import { timeEntries, projects, categories, users } from "../drizzle/schema.ts";
 
 const db = drizzle(process.env.DATABASE_URL);
 
-// Time entries data
+// October 2025 time entries data
 const entries = [
-  { date: "2025-09-09", start: "15:00", end: "22:00", category: "GF", description: "Hohle Gasse KI Event" },
-  { date: "2025-09-10", start: "09:00", end: "09:30", category: "GF", description: "Kt. Schwyz DT" },
-  { date: "2025-09-10", start: "12:45", end: "17:45", category: "GF", description: "SN Andy" },
-  { date: "2025-09-10", start: "08:00", end: "09:00", category: "NRP", description: "CSEM" },
-  { date: "2025-09-15", start: "09:00", end: "10:30", category: "GF", description: "Ops meeting" },
-  { date: "2025-09-15", start: "11:00", end: "15:00", category: "GF", description: "Requirements GMI Scope" },
-  { date: "2025-09-16", start: "10:00", end: "11:00", category: "GF", description: "CSEM, Meetings MarKom" },
-  { date: "2025-09-16", start: "14:00", end: "18:00", category: "GF", description: "Hackathon mit Kt. Schwyz" },
-  { date: "2025-09-17", start: "13:00", end: "14:00", category: "GF", description: "GMI, FHNW" },
-  { date: "2025-09-18", start: "15:00", end: "18:00", category: "GF", description: "Hackathon" },
-  { date: "2025-09-18", start: "18:00", end: "21:00", category: "NRP", description: "CSEM" },
-  { date: "2025-09-22", start: "09:00", end: "10:30", category: "GF", description: "Koordination Meetings" },
-  { date: "2025-09-24", start: "16:00", end: "18:00", category: "GF", description: "Tage des Gründes vorbereiten" },
-  { date: "2025-09-25", start: "08:00", end: "09:30", category: "GF", description: "Sync Elisabeth + Event prep" },
-  { date: "2025-09-25", start: "12:00", end: "19:00", category: "SU", description: "Tag des Gründes" },
-  { date: "2025-09-25", start: "19:00", end: "21:00", category: "GF", description: "Tag des Gründes" },
-  { date: "2025-09-28", start: "07:30", end: "08:30", category: "GF", description: "Tag des Gründen Blogbeitrag" },
-  { date: "2025-09-28", start: "14:00", end: "16:00", category: "NRP", description: "Sichtung Nachhaltigkeits Unterlagen" },
-  { date: "2025-09-29", start: "10:00", end: "15:30", category: "GF", description: "Meetings FHNW GMI, Unterlagen vorbereiten" },
-  { date: "2025-09-29", start: "16:00", end: "20:30", category: "GF", description: "Webinar, Vorbereitung, Blog post" },
-  { date: "2025-09-29", start: "21:59", end: "23:59", category: "GF", description: "Tag des Gründes - Rückblick" },
-  { date: "2025-09-30", start: "11:30", end: "12:45", category: "NRP", description: "Sync Elisabeth + Event prep" },
-  { date: "2025-09-30", start: "06:00", end: "08:00", category: "NRP", description: "Vorbereitung und Anpasungen" },
-  { date: "2025-09-30", start: "16:00", end: "19:00", category: "GF", description: "Sichtung und Beurteilung Startups ImR + com" },
+  { date: "2025-10-02", start: "09:00", end: "12:00", category: "GF", description: "Meetings, Emails, Impuslraum, Anpassungen" },
+  { date: "2025-10-02", start: "13:15", end: "14:15", category: "NRP", description: "NRP KMU Tech bridge" },
+  { date: "2025-10-06", start: "13:30", end: "17:00", category: "GF", description: "ITZ Persona / GMI sync, Beschreibung" },
+  { date: "2025-10-09", start: "15:45", end: "17:30", category: "GF", description: "Mails" },
+  { date: "2025-10-10", start: "14:00", end: "15:15", category: "NRP", description: "CSEM" },
+  { date: "2025-10-10", start: "10:00", end: "11:30", category: "GF", description: "Mails, Follow ups" },
+  { date: "2025-10-13", start: "09:00", end: "11:30", category: "GF", description: "Meetings, Emails, ImR, Anpassungen" },
+  { date: "2025-10-13", start: "11:30", end: "12:30", category: "NRP", description: "comms CSEM" },
+  { date: "2025-10-17", start: "09:00", end: "11:00", category: "GF", description: "Hackathon" },
+  { date: "2025-10-17", start: "11:30", end: "15:00", category: "NRP", description: "CSEM" },
+  { date: "2025-10-17", start: "09:00", end: "12:00", category: "GF", description: "Meetings" },
+  { date: "2025-10-22", start: "09:00", end: "16:30", category: "GF", description: "GetLau., Hack, Domain, NS Issue, IT, Login Imo" },
+  { date: "2025-10-23", start: "14:00", end: "16:00", category: "NRP", description: "CSEM, Mail, Speakers, .." },
+  { date: "2025-10-23", start: "11:00", end: "11:45", category: "GF", description: "IPr coordination" },
 ];
 
 // Calculate duration in hours (stored as integer * 100)
@@ -49,7 +39,7 @@ function calculateDuration(startTime, endTime) {
 
 async function importEntries() {
   try {
-    console.log("Starting import...");
+    console.log("Starting October 2025 import...");
     
     // Get the admin user (first user)
     const userList = await db.select().from(users).limit(1);
@@ -74,14 +64,13 @@ async function importEntries() {
     // Find the "Geschäftsführung" project (for GF entries)
     const gfProject = allProjects.find(p => p.name.includes("Geschäftsführung"));
     const nrpProject = allProjects.find(p => p.name.includes("NRP"));
-    const suProject = allProjects.find(p => p.name.includes("Tag des Gründes") || p.name.includes("SU"));
     
     if (!gfProject) {
       console.error("Could not find Geschäftsführung project");
       return;
     }
     
-    console.log(`Using project IDs: GF=${gfProject.id}, NRP=${nrpProject?.id}, SU=${suProject?.id}`);
+    console.log(`Using project IDs: GF=${gfProject.id}, NRP=${nrpProject?.id}`);
     
     let imported = 0;
     let skipped = 0;
@@ -93,8 +82,6 @@ async function importEntries() {
         projectId = gfProject.id;
       } else if (entry.category === "NRP") {
         projectId = nrpProject?.id || gfProject.id;
-      } else if (entry.category === "SU") {
-        projectId = suProject?.id || gfProject.id;
       } else {
         projectId = gfProject.id; // Default to GF project
       }
@@ -132,7 +119,7 @@ async function importEntries() {
       }
     }
     
-    console.log(`\nImport complete!`);
+    console.log(`\nOctober 2025 import complete!`);
     console.log(`Imported: ${imported} entries`);
     console.log(`Skipped: ${skipped} entries`);
     

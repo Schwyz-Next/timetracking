@@ -1,0 +1,9 @@
+{
+  "query": "SELECT id, date, startTime, endTime, description FROM timeEntries WHERE date >= '2025-10-01' AND date <= '2025-10-31'",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user AwGvLACcNJJUAmU.2fefbe8204f3 --database Miyi8dMEHsq6BSut9VsF2X --execute SELECT id, date, startTime, endTime, description FROM timeEntries WHERE date >= '2025-10-01' AND date <= '2025-10-31'",
+  "rows": [],
+  "messages": [],
+  "stdout": "",
+  "stderr": "",
+  "execution_time_ms": 53
+}

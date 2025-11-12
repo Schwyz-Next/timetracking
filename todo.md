@@ -146,3 +146,6 @@
 
 ## Time Entries Filtering
 - [x] Add month/year filter to Time Entries page
+
+## Bug Fixes
+- [x] Fix month filter showing September 30 entries in October filter (timezone issue resolved)

@@ -143,3 +143,6 @@
 - [x] Add month-by-month chart visualization
 - [x] Add last 3 months overview boxes
 - [x] Add annual overview summary box
+
+## Time Entries Filtering
+- [x] Add month/year filter to Time Entries page

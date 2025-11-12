@@ -41,6 +41,9 @@ import DashboardLayout from "@/components/DashboardLayout";
 import { format } from "date-fns";
 
 export default function TimeEntries() {
+  const currentDate = new Date();
+  const [selectedMonth, setSelectedMonth] = useState(currentDate.getMonth() + 1);
+  const [selectedYear, setSelectedYear] = useState(currentDate.getFullYear());
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
   const [editingEntry, setEditingEntry] = useState<number | null>(null);
   const [useManualEntry, setUseManualEntry] = useState(false);
@@ -56,8 +59,15 @@ export default function TimeEntries() {
   });
 
   const utils = trpc.useUtils();
+  
+  // Calculate start and end dates for the selected month
+  const startDate = new Date(selectedYear, selectedMonth - 1, 1).toISOString().split('T')[0];
+  const endDate = new Date(selectedYear, selectedMonth, 0).toISOString().split('T')[0];
+  
   const { data: entries, isLoading } = trpc.timeEntries.list.useQuery({
-    limit: 100,
+    startDate,
+    endDate,
+    limit: 1000,
   });
   const { data: projects } = trpc.projects.list.useQuery({ status: "active" });
   const { data: categories } = trpc.categories.list.useQuery();
@@ -186,8 +196,49 @@ export default function TimeEntries() {
 
         <Card>
           <CardHeader>
-            <CardTitle>Recent Entries</CardTitle>
-            <CardDescription>Your latest time tracking entries</CardDescription>
+            <div className="flex items-center justify-between">
+              <div>
+                <CardTitle>Time Entries</CardTitle>
+                <CardDescription>Your time tracking entries</CardDescription>
+              </div>
+              <div className="flex items-center gap-2">
+                <Select
+                  value={selectedMonth.toString()}
+                  onValueChange={(value) => setSelectedMonth(parseInt(value))}
+                >
+                  <SelectTrigger className="w-[140px]">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="1">January</SelectItem>
+                    <SelectItem value="2">February</SelectItem>
+                    <SelectItem value="3">March</SelectItem>
+                    <SelectItem value="4">April</SelectItem>
+                    <SelectItem value="5">May</SelectItem>
+                    <SelectItem value="6">June</SelectItem>
+                    <SelectItem value="7">July</SelectItem>
+                    <SelectItem value="8">August</SelectItem>
+                    <SelectItem value="9">September</SelectItem>
+                    <SelectItem value="10">October</SelectItem>
+                    <SelectItem value="11">November</SelectItem>
+                    <SelectItem value="12">December</SelectItem>
+                  </SelectContent>
+                </Select>
+                <Select
+                  value={selectedYear.toString()}
+                  onValueChange={(value) => setSelectedYear(parseInt(value))}
+                >
+                  <SelectTrigger className="w-[100px]">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="2024">2024</SelectItem>
+                    <SelectItem value="2025">2025</SelectItem>
+                    <SelectItem value="2026">2026</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
           </CardHeader>
           <CardContent>
             {isLoading ? (

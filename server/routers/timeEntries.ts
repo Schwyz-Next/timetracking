@@ -330,7 +330,7 @@ export const timeEntriesRouter = router({
         .leftJoin(projects, eq(timeEntries.projectId, projects.id))
         .leftJoin(categories, eq(timeEntries.categoryId, categories.id))
         .where(whereClause)
-        .groupBy(timeEntries.projectId, timeEntries.categoryId);
+        .groupBy(timeEntries.projectId, timeEntries.categoryId, projects.name, categories.code);
 
       return summary.map((item) => ({
         ...item,

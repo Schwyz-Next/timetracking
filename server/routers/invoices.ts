@@ -184,7 +184,7 @@ export const invoicesRouter = router({
 
       const invoiceNumber = `${input.year}-${String(input.month).padStart(2, "0")}-${String(existingInvoices.length + 1).padStart(3, "0")}`;
 
-      // Create invoice
+      // Create invoice and get the auto-generated ID
       const invoiceResult = await db.insert(invoices).values({
         invoiceNumber,
         userId: ctx.user.id,
@@ -195,9 +195,14 @@ export const invoicesRouter = router({
         totalAmount: Math.round(totalAmount * 100),
         status: "draft",
         pdfUrl: null,
-      });
+      }).$returningId();
 
-      const invoiceId = Number((invoiceResult as any).insertId);
+      // For MySQL with auto-increment, $returningId() returns an array of objects with the id
+      const invoiceId = invoiceResult[0]?.id;
+      
+      if (!invoiceId) {
+        throw new Error("Failed to create invoice: no ID returned from database");
+      }
 
       // Create invoice items
       for (const item of items) {

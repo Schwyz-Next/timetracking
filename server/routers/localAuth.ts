@@ -56,8 +56,10 @@ export const localAuthRouter = router({
       // Hash password
       const passwordHash = await bcrypt.hash(input.password, 10);
 
-      // Create user
+      // Create user with openId for local users
+      const openId = `local:${input.username}`;
       const result = await db.insert(users).values({
+        openId,
         username: input.username,
         passwordHash,
         name: input.name,

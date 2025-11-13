@@ -1,0 +1,9 @@
+{
+  "query": "UPDATE users SET openId = 'local:celso' WHERE username = 'celso'",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user AwGvLACcNJJUAmU.2fefbe8204f3 --database Miyi8dMEHsq6BSut9VsF2X --execute UPDATE users SET openId = 'local:celso' WHERE username = 'celso'",
+  "rows": [],
+  "messages": [],
+  "stdout": "",
+  "stderr": "",
+  "execution_time_ms": 53
+}

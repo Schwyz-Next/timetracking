@@ -157,3 +157,6 @@
 ## UI Cleanup
 - [x] Hide "Made with Manus" badge from bottom right using CSS
 - [x] Change OAuth button text to "Sign in with OAuth" on login page
+
+## Bug Fixes
+- [x] Fix local login redirect issue - users see "login successful" but land back at login page

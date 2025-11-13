@@ -46,6 +46,19 @@ export const projects = mysqlTable("projects", {
 export type Project = typeof projects.$inferSelect;
 export type InsertProject = typeof projects.$inferInsert;
 
+// User project quotas table - stores individual quota allocations per user per project
+export const userProjectQuotas = mysqlTable("userProjectQuotas", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(), // Reference to users table
+  projectId: int("projectId").notNull(), // Reference to projects table
+  quotaHours: int("quotaHours").notNull(), // Individual quota in hours for this user on this project
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type UserProjectQuota = typeof userProjectQuotas.$inferSelect;
+export type InsertUserProjectQuota = typeof userProjectQuotas.$inferInsert;
+
 // Categories table - stores time entry categories (GF, NRP, IC, etc.)
 export const categories = mysqlTable("categories", {
   id: int("id").autoincrement().primaryKey(),

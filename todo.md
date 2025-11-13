@@ -165,3 +165,11 @@
 - [x] Update application logo to new Schwyz Next logo
 - [x] Fix data isolation - users should only see their own time entries and statistics, not all users' data
 - [x] Update quota alert to show "Quota Exceeded" when project reaches 100%, not just when over by 1h
+
+## Per-User Project Quotas
+- [x] Design quota system architecture (individual + total project quotas)
+- [x] Create userProjectQuotas table in database schema
+- [x] Update backend queries to calculate individual and total usage
+- [x] Update dashboard to display both individual and shared project quotas
+- [x] Add backend API for managing individual user quota allocations per project
+- [x] Test quota system with multiple users on shared projects

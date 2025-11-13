@@ -20,7 +20,10 @@ export type AuditAction =
   | "invoice.status_changed"
   | "category.created"
   | "category.updated"
-  | "category.deleted";
+  | "category.deleted"
+  | "quota.created"
+  | "quota.updated"
+  | "quota.deleted";
 
 export interface AuditLogOptions {
   userId?: number;

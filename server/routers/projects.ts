@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { protectedProcedure, router } from "../_core/trpc";
 import { getDb } from "../db";
-import { projects, timeEntries } from "../../drizzle/schema";
+import { projects, timeEntries, userProjectQuotas } from "../../drizzle/schema";
 import { eq, and, sql } from "drizzle-orm";
 import { auditLog } from "../auditLog";
 
@@ -37,7 +37,8 @@ export const projectsRouter = router({
       // Get usage statistics for each project
       const projectsWithUsage = await Promise.all(
         allProjects.map(async (project: typeof projects.$inferSelect) => {
-          const usageResult = await db
+          // Get individual user's hours on this project
+          const userUsageResult = await db
             .select({
               totalHours: sql<number>`COALESCE(SUM(${timeEntries.durationHours}), 0)`,
             })
@@ -49,16 +50,46 @@ export const projectsRouter = router({
               )
             );
 
-          const totalHours = (usageResult[0]?.totalHours || 0) / 100; // Convert back from stored format
-          const quotaHours = project.totalQuotaHours;
-          const usagePercentage = quotaHours > 0 ? (totalHours / quotaHours) * 100 : 0;
-          const isWarning = usagePercentage >= project.warningThreshold;
+          // Get total project hours (all users)
+          const totalUsageResult = await db
+            .select({
+              totalHours: sql<number>`COALESCE(SUM(${timeEntries.durationHours}), 0)`,
+            })
+            .from(timeEntries)
+            .where(eq(timeEntries.projectId, project.id));
+
+          // Get individual user quota for this project
+          const userQuotaResult = await db
+            .select()
+            .from(userProjectQuotas)
+            .where(
+              and(
+                eq(userProjectQuotas.projectId, project.id),
+                eq(userProjectQuotas.userId, ctx.user.id)
+              )
+            )
+            .limit(1);
+
+          const userHours = (userUsageResult[0]?.totalHours || 0) / 100;
+          const totalProjectHours = (totalUsageResult[0]?.totalHours || 0) / 100;
+          const userQuota = userQuotaResult[0]?.quotaHours || project.totalQuotaHours; // Fallback to project quota if no individual quota
+          const totalQuota = project.totalQuotaHours;
+
+          const userUsagePercentage = userQuota > 0 ? (userHours / userQuota) * 100 : 0;
+          const totalUsagePercentage = totalQuota > 0 ? (totalProjectHours / totalQuota) * 100 : 0;
+          const isWarning = userUsagePercentage >= project.warningThreshold;
 
           return {
             ...project,
-            usedHours: totalHours,
-            usagePercentage,
+            // Individual user stats
+            usedHours: userHours,
+            userQuotaHours: userQuota,
+            usagePercentage: userUsagePercentage,
             isWarning,
+            // Total project stats
+            totalUsedHours: totalProjectHours,
+            totalQuotaHours: totalQuota,
+            totalUsagePercentage,
           };
         })
       );

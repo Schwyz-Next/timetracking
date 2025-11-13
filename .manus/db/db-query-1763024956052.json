@@ -1,0 +1,24 @@
+{
+  "query": "-- Get project and user IDs first\nSELECT p.id as projectId, p.name, p.totalQuotaHours, u.id as userId, u.name as userName \nFROM projects p\nCROSS JOIN users u\nWHERE p.name = 'NRP CSEM' AND u.name IN ('Vikram Bhatnagar', 'Celso Cattaneo');\n\n-- Insert individual quotas: Vikram gets 25h, Celso gets 14h out of 39h total\nINSERT INTO userProjectQuotas (userId, projectId, quotaHours) VALUES\n((SELECT id FROM users WHERE name = 'Vikram Bhatnagar'), (SELECT id FROM projects WHERE name = 'NRP CSEM'), 25),\n((SELECT id FROM users WHERE name = 'Celso Cattaneo'), (SELECT id FROM projects WHERE name = 'NRP CSEM'), 14);",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user AwGvLACcNJJUAmU.2fefbe8204f3 --database Miyi8dMEHsq6BSut9VsF2X --execute -- Get project and user IDs first\nSELECT p.id as projectId, p.name, p.totalQuotaHours, u.id as userId, u.name as userName \nFROM projects p\nCROSS JOIN users u\nWHERE p.name = 'NRP CSEM' AND u.name IN ('Vikram Bhatnagar', 'Celso Cattaneo');\n\n-- Insert individual quotas: Vikram gets 25h, Celso gets 14h out of 39h total\nINSERT INTO userProjectQuotas (userId, projectId, quotaHours) VALUES\n((SELECT id FROM users WHERE name = 'Vikram Bhatnagar'), (SELECT id FROM projects WHERE name = 'NRP CSEM'), 25),\n((SELECT id FROM users WHERE name = 'Celso Cattaneo'), (SELECT id FROM projects WHERE name = 'NRP CSEM'), 14);",
+  "rows": [
+    {
+      "projectId": "1",
+      "name": "NRP CSEM",
+      "totalQuotaHours": "39",
+      "userId": "660009",
+      "userName": "Celso Cattaneo"
+    },
+    {
+      "projectId": "1",
+      "name": "NRP CSEM",
+      "totalQuotaHours": "39",
+      "userId": "1",
+      "userName": "Vikram Bhatnagar"
+    }
+  ],
+  "messages": [],
+  "stdout": "projectId\tname\ttotalQuotaHours\tuserId\tuserName\n1\tNRP CSEM\t39\t660009\tCelso Cattaneo\n1\tNRP CSEM\t39\t1\tVikram Bhatnagar\n",
+  "stderr": "",
+  "execution_time_ms": 83
+}

@@ -233,8 +233,12 @@ export default function Dashboard() {
                             )}
                           </div>
                           <p className="text-sm text-muted-foreground">
-                            {project.usedHours.toFixed(2)}h / {project.totalQuotaHours}h
+                            Your: {project.usedHours.toFixed(2)}h / {project.userQuotaHours}h
                             ({project.usagePercentage.toFixed(1)}%)
+                          </p>
+                          <p className="text-xs text-muted-foreground">
+                            Total: {project.totalUsedHours.toFixed(2)}h / {project.totalQuotaHours}h
+                            ({project.totalUsagePercentage.toFixed(1)}%)
                           </p>
                           <p className={`text-xs font-medium ${status.color}`}>
                             {status.message}

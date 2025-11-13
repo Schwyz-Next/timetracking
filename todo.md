@@ -160,3 +160,6 @@
 
 ## Bug Fixes
 - [x] Fix local login redirect issue - users see "login successful" but land back at login page
+
+## Branding Updates
+- [x] Update application logo to new Schwyz Next logo

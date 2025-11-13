@@ -14,7 +14,7 @@ export const projectsRouter = router({
         status: z.enum(["active", "archived"]).optional(),
       })
     )
-    .query(async ({ input }) => {
+    .query(async ({ input, ctx }) => {
       const db = await getDb();
       if (!db) throw new Error("Database not available");
       
@@ -42,7 +42,12 @@ export const projectsRouter = router({
               totalHours: sql<number>`COALESCE(SUM(${timeEntries.durationHours}), 0)`,
             })
             .from(timeEntries)
-            .where(eq(timeEntries.projectId, project.id));
+            .where(
+              and(
+                eq(timeEntries.projectId, project.id),
+                eq(timeEntries.userId, ctx.user.id)
+              )
+            );
 
           const totalHours = (usageResult[0]?.totalHours || 0) / 100; // Convert back from stored format
           const quotaHours = project.totalQuotaHours;

@@ -163,3 +163,4 @@
 
 ## Branding Updates
 - [x] Update application logo to new Schwyz Next logo
+- [x] Fix data isolation - users should only see their own time entries and statistics, not all users' data

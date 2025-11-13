@@ -190,7 +190,7 @@ export default function Projects() {
                     <div className="flex justify-between text-sm">
                       <span className="text-muted-foreground">Quota</span>
                       <span className="font-medium">
-                        {project.usedHours.toFixed(1)}h / {project.totalQuotaHours}h
+                        {project.usedHours.toFixed(1)}h / {project.userQuotaHours}h
                       </span>
                     </div>
                     <Progress

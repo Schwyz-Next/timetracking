@@ -178,3 +178,4 @@
 - [x] Create quota management dialog component
 - [x] Add "Manage Quotas" button to Projects page
 - [x] Test quota assignment through UI
+- [x] Fix Projects page quota warning boxes to show individual user quota percentage, not total project percentage

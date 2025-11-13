@@ -26,14 +26,16 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
-import { Plus, Edit, Archive, Copy } from "lucide-react";
+import { Plus, Edit, Archive, Copy, Users } from "lucide-react";
 import { toast } from "sonner";
 import DashboardLayout from "@/components/DashboardLayout";
 import { Progress } from "@/components/ui/progress";
+import ManageQuotasDialog from "@/components/ManageQuotasDialog";
 
 export default function Projects() {
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
   const [editingProject, setEditingProject] = useState<number | null>(null);
+  const [managingQuotasProject, setManagingQuotasProject] = useState<{ id: number; name: string; totalQuotaHours: number } | null>(null);
   const [formData, setFormData] = useState({
     name: "",
     hourlyRate: "",
@@ -213,11 +215,18 @@ export default function Projects() {
                     <Button
                       variant="outline"
                       size="sm"
-                      className="flex-1"
                       onClick={() => handleEdit(project)}
                     >
                       <Edit className="h-3 w-3 mr-1" />
                       Edit
+                    </Button>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => setManagingQuotasProject({ id: project.id, name: project.name, totalQuotaHours: project.totalQuotaHours })}
+                      title="Manage User Quotas"
+                    >
+                      <Users className="h-3 w-3" />
                     </Button>
                     <Button
                       variant="outline"
@@ -399,6 +408,17 @@ export default function Projects() {
             </form>
           </DialogContent>
         </Dialog>
+
+        {/* Manage Quotas Dialog */}
+        {managingQuotasProject && (
+          <ManageQuotasDialog
+            projectId={managingQuotasProject.id}
+            projectName={managingQuotasProject.name}
+            totalQuotaHours={managingQuotasProject.totalQuotaHours}
+            open={!!managingQuotasProject}
+            onOpenChange={(open) => !open && setManagingQuotasProject(null)}
+          />
+        )}
       </div>
     </DashboardLayout>
   );

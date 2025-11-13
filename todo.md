@@ -173,3 +173,8 @@
 - [x] Update dashboard to display both individual and shared project quotas
 - [x] Add backend API for managing individual user quota allocations per project
 - [x] Test quota system with multiple users on shared projects
+
+## Quota Management UI
+- [x] Create quota management dialog component
+- [x] Add "Manage Quotas" button to Projects page
+- [x] Test quota assignment through UI

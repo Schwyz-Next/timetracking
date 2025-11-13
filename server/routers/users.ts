@@ -17,8 +17,8 @@ const adminProcedure = protectedProcedure.use(({ ctx, next }) => {
 });
 
 export const usersRouter = router({
-  // Get all users (admin only)
-  list: adminProcedure.query(async () => {
+  // Get all users (for quota management)
+  list: protectedProcedure.query(async () => {
     const db = await getDb();
     if (!db) throw new Error("Database not available");
 

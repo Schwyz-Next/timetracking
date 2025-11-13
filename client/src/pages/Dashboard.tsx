@@ -93,16 +93,16 @@ export default function Dashboard() {
     const warningThreshold = project.warningThreshold || 80;
     const overageHours = project.usedHours - project.totalQuotaHours;
 
-    // Only show red if actually over by 1 hour or more
-    if (overageHours >= 1) {
+    // Show red if at or above 100% quota
+    if (percentage >= 100) {
       return {
         color: "text-red-600",
         bgColor: "bg-red-100",
         progressColor: "[&>div]:bg-red-600",
-        message: `Over by ${overageHours.toFixed(2)}h`,
+        message: overageHours > 0 ? `Over by ${overageHours.toFixed(2)}h` : `${(100 - percentage).toFixed(1)}% remaining`,
         icon: true,
       };
-    } else if (percentage >= warningThreshold && overageHours < 0) {
+    } else if (percentage >= warningThreshold) {
       // Show orange only if at warning threshold AND still under quota
       return {
         color: "text-orange-600",

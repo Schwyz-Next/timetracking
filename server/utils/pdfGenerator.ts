@@ -132,12 +132,11 @@ export function generateTimeReportPDF(data: ReportData) {
   const tableTop = doc.y;
   const colWidths = {
     date: 70,
-    project: 120,
-    category: 70,
-    duration: 90,
-    rate: 70,
-    cost: 70,
-    description: 250,
+    project: 140,
+    category: 80,
+    duration: 100,
+    rate: 80,
+    description: 270,
   };
 
   doc
@@ -161,8 +160,6 @@ export function generateTimeReportPDF(data: ReportData) {
   x += colWidths.duration;
   doc.text("Rate", x, tableTop + 6);
   x += colWidths.rate;
-  doc.text("Cost", x, tableTop + 6);
-  x += colWidths.cost;
   doc.text("Description", x, tableTop + 6);
 
   doc.y = tableTop + 25;
@@ -209,9 +206,6 @@ export function generateTimeReportPDF(data: ReportData) {
     doc.text(`CHF ${entry.hourlyRate.toFixed(0)}`, x, currentY + 6);
 
     x += colWidths.rate;
-    doc.text(`CHF ${entry.cost.toFixed(2)}`, x, currentY + 6);
-
-    x += colWidths.cost;
     const desc = entry.description || "-";
     doc.text(desc, x, currentY + 6, { width: colWidths.description - 5 });
 
@@ -220,7 +214,6 @@ export function generateTimeReportPDF(data: ReportData) {
   });
 
   // Total row
-  const totalCost = data.entries.reduce((sum, entry) => sum + entry.cost, 0);
   doc
     .rect(50, currentY, 740, 25)
     .fillAndStroke(darkBlue, darkBlue);
@@ -228,9 +221,8 @@ export function generateTimeReportPDF(data: ReportData) {
   doc
     .fontSize(10)
     .fillColor("white")
-    .text("Total", 55, currentY + 8, { width: 400 })
-    .text(`${data.totalHours.toFixed(2)}h`, 55 + colWidths.date + colWidths.project + colWidths.category, currentY + 8)
-    .text(`CHF ${totalCost.toFixed(2)}`, 55 + colWidths.date + colWidths.project + colWidths.category + colWidths.duration + colWidths.rate, currentY + 8);
+    .text("Total Hours:", 55, currentY + 8)
+    .text(`${data.totalHours.toFixed(2)}h`, 55 + colWidths.date + colWidths.project + colWidths.category, currentY + 8, { width: colWidths.duration });
 
   // Footer
   const pageRange = doc.bufferedPageRange();

@@ -204,3 +204,10 @@
 - [x] Add hourly rate column to detailed entries table
 - [x] Add cost column (rate × hours) to detailed entries table
 - [x] Test PDF export with new layout and columns
+
+## PDF Report Refinement
+- [x] Remove cost column from detailed entries table
+- [x] Keep rate column in the table
+- [x] Ensure clean table styling and layout
+- [x] Display total hours row at the end of the table
+- [x] Test updated PDF report

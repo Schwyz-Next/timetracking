@@ -9,6 +9,8 @@ export interface TimeEntry {
   startTime: string | null;
   endTime: string | null;
   description: string | null;
+  hourlyRate: number;
+  cost: number;
 }
 
 export interface ProjectSummary {
@@ -31,6 +33,7 @@ export interface ReportData {
 export function generateTimeReportPDF(data: ReportData) {
   const doc = new PDFDocument({
     size: "A4",
+    layout: "landscape", // Landscape orientation
     margins: { top: 50, bottom: 50, left: 50, right: 50 },
   });
 
@@ -40,31 +43,37 @@ export function generateTimeReportPDF(data: ReportData) {
   const gray = "#7F8C8D";
   const lightGray = "#ECF0F1";
 
-  // Header
-  doc
-    .fontSize(24)
-    .fillColor(darkBlue)
-    .text("Schwyz Next", { continued: true })
-    .fillColor(cyan)
-    .text("_");
+  // Header with logo
+  const logoPath = "./client/public/snlogo.jpeg";
+  try {
+    doc.image(logoPath, 50, 40, { width: 120 });
+  } catch (error) {
+    // Fallback to text if logo not found
+    doc
+      .fontSize(24)
+      .fillColor(darkBlue)
+      .text("Schwyz Next", 50, 40, { continued: true })
+      .fillColor(cyan)
+      .text("_");
+  }
 
-  doc.moveDown(0.5);
   doc
     .fontSize(20)
     .fillColor(darkBlue)
-    .text("Monthly Time Report");
+    .text("Monthly Time Report", 200, 50);
 
-  doc.moveDown(0.3);
   doc
     .fontSize(10)
     .fillColor(gray)
-    .text(`Period: ${data.month}`)
-    .text(`Generated for: ${data.userName}`)
+    .text(`Period: ${data.month}`, 200, 75)
+    .text(`Generated for: ${data.userName}`, 200, 90)
     .text(`Generated on: ${new Date().toLocaleDateString("en-US", {
       year: "numeric",
       month: "long",
       day: "numeric",
-    })}`);
+    })}`, 200, 105);
+  
+  doc.y = 130;
 
   doc.moveDown(1);
 
@@ -76,10 +85,10 @@ export function generateTimeReportPDF(data: ReportData) {
 
   doc.moveDown(0.5);
 
-  // Summary box
+  // Summary box (wider for landscape)
   const summaryY = doc.y;
   doc
-    .rect(50, summaryY, 495, 80)
+    .rect(50, summaryY, 740, 80)
     .fillAndStroke(lightGray, darkBlue);
 
   doc
@@ -123,19 +132,21 @@ export function generateTimeReportPDF(data: ReportData) {
   const tableTop = doc.y;
   const colWidths = {
     date: 70,
-    project: 100,
-    category: 60,
-    duration: 80,
-    description: 185,
+    project: 120,
+    category: 70,
+    duration: 90,
+    rate: 70,
+    cost: 70,
+    description: 250,
   };
 
   doc
     .fontSize(9)
     .fillColor("white");
 
-  // Header background
+  // Header background (wider for landscape)
   doc
-    .rect(50, tableTop, 495, 20)
+    .rect(50, tableTop, 740, 20)
     .fill(darkBlue);
 
   // Header text
@@ -148,6 +159,10 @@ export function generateTimeReportPDF(data: ReportData) {
   x += colWidths.category;
   doc.text("Duration", x, tableTop + 6);
   x += colWidths.duration;
+  doc.text("Rate", x, tableTop + 6);
+  x += colWidths.rate;
+  doc.text("Cost", x, tableTop + 6);
+  x += colWidths.cost;
   doc.text("Description", x, tableTop + 6);
 
   doc.y = tableTop + 25;
@@ -166,7 +181,7 @@ export function generateTimeReportPDF(data: ReportData) {
     // Alternate row colors
     const rowBg = rowIndex % 2 === 0 ? "white" : lightGray;
     doc
-      .rect(50, currentY, 495, 20)
+      .rect(50, currentY, 740, 20)
       .fill(rowBg);
 
     doc.fillColor(darkBlue);
@@ -191,12 +206,31 @@ export function generateTimeReportPDF(data: ReportData) {
     doc.text(timeRange, x, currentY + 6);
 
     x += colWidths.duration;
+    doc.text(`CHF ${entry.hourlyRate.toFixed(0)}`, x, currentY + 6);
+
+    x += colWidths.rate;
+    doc.text(`CHF ${entry.cost.toFixed(2)}`, x, currentY + 6);
+
+    x += colWidths.cost;
     const desc = entry.description || "-";
     doc.text(desc, x, currentY + 6, { width: colWidths.description - 5 });
 
     currentY += 20;
     rowIndex++;
   });
+
+  // Total row
+  const totalCost = data.entries.reduce((sum, entry) => sum + entry.cost, 0);
+  doc
+    .rect(50, currentY, 740, 25)
+    .fillAndStroke(darkBlue, darkBlue);
+
+  doc
+    .fontSize(10)
+    .fillColor("white")
+    .text("Total", 55, currentY + 8, { width: 400 })
+    .text(`${data.totalHours.toFixed(2)}h`, 55 + colWidths.date + colWidths.project + colWidths.category, currentY + 8)
+    .text(`CHF ${totalCost.toFixed(2)}`, 55 + colWidths.date + colWidths.project + colWidths.category + colWidths.duration + colWidths.rate, currentY + 8);
 
   // Footer
   const pageRange = doc.bufferedPageRange();

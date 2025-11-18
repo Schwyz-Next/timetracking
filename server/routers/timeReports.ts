@@ -49,15 +49,23 @@ export const timeReportsRouter = router({
       }
 
       // Transform data for PDF generation
-      const timeEntryData: TimeEntry[] = entries.map((e) => ({
-        date: e.entry.date,
-        projectName: e.project?.name || "Unknown",
-        categoryName: e.category?.name || "Unknown",
-        hours: e.entry.durationHours,
-        startTime: e.entry.startTime,
-        endTime: e.entry.endTime,
-        description: e.entry.description,
-      }));
+      const timeEntryData: TimeEntry[] = entries.map((e) => {
+        const hourlyRate = e.project?.hourlyRate || 0;
+        const hours = e.entry.durationHours;
+        const cost = (hourlyRate * hours) / 100; // hourlyRate is stored in cents
+        
+        return {
+          date: e.entry.date,
+          projectName: e.project?.name || "Unknown",
+          categoryName: e.category?.name || "Unknown",
+          hours,
+          startTime: e.entry.startTime,
+          endTime: e.entry.endTime,
+          description: e.entry.description,
+          hourlyRate: hourlyRate / 100, // Convert cents to CHF
+          cost,
+        };
+      });
 
       // Calculate project summaries
       const projectMap = new Map<string, { hours: number; count: number }>();

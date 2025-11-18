@@ -197,3 +197,10 @@
 - [x] Persist selected user in session/state
 - [x] Add visual indicator showing which user's data is being viewed
 - [x] Test switching between users and verify data isolation
+
+## PDF Report Improvements
+- [x] Update logo to new Schwyz Next logo (snlogo.jpeg)
+- [x] Change PDF layout from portrait to landscape
+- [x] Add hourly rate column to detailed entries table
+- [x] Add cost column (rate × hours) to detailed entries table
+- [x] Test PDF export with new layout and columns

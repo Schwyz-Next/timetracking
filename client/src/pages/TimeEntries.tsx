@@ -39,11 +39,13 @@ import { Plus, Edit, Trash2, Calendar, Clock, Download } from "lucide-react";
 import { toast } from "sonner";
 import DashboardLayout from "@/components/DashboardLayout";
 import { format } from "date-fns";
+import { UserSwitcher } from "@/components/UserSwitcher";
 
 export default function TimeEntries() {
   const currentDate = new Date();
   const [selectedMonth, setSelectedMonth] = useState(currentDate.getMonth() + 1);
   const [selectedYear, setSelectedYear] = useState(currentDate.getFullYear());
+  const [selectedUserId, setSelectedUserId] = useState<number | null>(null);
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
   const [editingEntry, setEditingEntry] = useState<number | null>(null);
   const [useManualEntry, setUseManualEntry] = useState(false);
@@ -69,8 +71,12 @@ export default function TimeEntries() {
     startDate,
     endDate,
     limit: 1000,
+    userId: selectedUserId || undefined,
   });
-  const { data: projects } = trpc.projects.list.useQuery({ status: "active" });
+  const { data: projects } = trpc.projects.list.useQuery({ 
+    status: "active",
+    userId: selectedUserId || undefined,
+  });
   const { data: categories } = trpc.categories.list.useQuery();
 
   const createEntry = trpc.timeEntries.create.useMutation({
@@ -212,7 +218,12 @@ export default function TimeEntries() {
             <h1 className="text-3xl font-bold">Time Entries</h1>
             <p className="text-muted-foreground">Track your working hours</p>
           </div>
-          <div className="flex gap-2">
+          <div className="flex items-center gap-4">
+            <UserSwitcher 
+              selectedUserId={selectedUserId} 
+              onUserChange={setSelectedUserId}
+            />
+            <div className="flex gap-2">
             <Button
               variant="outline"
               onClick={handleExportPDF}
@@ -231,6 +242,7 @@ export default function TimeEntries() {
               <Plus className="h-4 w-4 mr-2" />
               Add Entry
             </Button>
+            </div>
           </div>
         </div>
 

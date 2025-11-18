@@ -7,12 +7,16 @@ import { AlertCircle, Plus, Clock, TrendingUp, Calendar } from "lucide-react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import DashboardLayout from "@/components/DashboardLayout";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from "recharts";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
+import { UserSwitcher } from "@/components/UserSwitcher";
 
 export default function Dashboard() {
   const { data: user } = trpc.auth.me.useQuery();
+  const [selectedUserId, setSelectedUserId] = useState<number | null>(null);
+  
   const { data: projects, isLoading } = trpc.projects.list.useQuery({
     status: "active",
+    userId: selectedUserId || undefined,
   });
   
   const currentDate = new Date();
@@ -22,6 +26,7 @@ export default function Dashboard() {
   const { data: summary } = trpc.timeEntries.getSummary.useQuery({
     month: currentMonth,
     year: currentYear,
+    userId: selectedUserId || undefined,
   });
 
   // Get last 3 months data
@@ -41,22 +46,26 @@ export default function Dashboard() {
   const { data: month1Data } = trpc.timeEntries.getSummary.useQuery({
     month: last3Months[0].month,
     year: last3Months[0].year,
+    userId: selectedUserId || undefined,
   });
   
   const { data: month2Data } = trpc.timeEntries.getSummary.useQuery({
     month: last3Months[1].month,
     year: last3Months[1].year,
+    userId: selectedUserId || undefined,
   });
   
   const { data: month3Data } = trpc.timeEntries.getSummary.useQuery({
     month: last3Months[2].month,
     year: last3Months[2].year,
+    userId: selectedUserId || undefined,
   });
 
   // Get annual data (current year)
   const { data: annualData } = trpc.timeEntries.getSummary.useQuery({
     month: 0, // 0 means all months
     year: currentYear,
+    userId: selectedUserId || undefined,
   });
 
   const monthlyStats = useMemo(() => {
@@ -125,11 +134,17 @@ export default function Dashboard() {
   return (
     <DashboardLayout>
       <div className="space-y-6">
-        <div>
-          <h1 className="text-3xl font-bold">Time Tracker Dashboard</h1>
-          <p className="text-muted-foreground">
-            Welcome back, {user?.name || "User"}
-          </p>
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="text-3xl font-bold">Time Tracker Dashboard</h1>
+            <p className="text-muted-foreground">
+              Welcome back, {user?.name || "User"}
+            </p>
+          </div>
+          <UserSwitcher 
+            selectedUserId={selectedUserId} 
+            onUserChange={setSelectedUserId}
+          />
         </div>
 
         {/* Warnings */}

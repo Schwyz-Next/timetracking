@@ -25,12 +25,17 @@ export const timeEntriesRouter = router({
 
       const conditions = [];
 
+      // Determine which user's entries to show
       // Non-admin users can only see their own entries
-      if (ctx.user.role !== "admin") {
-        conditions.push(eq(timeEntries.userId, ctx.user.id));
-      } else if (input.userId) {
-        conditions.push(eq(timeEntries.userId, input.userId));
+      // Admins see their own entries by default, but can specify another userId
+      const targetUserId = input.userId || ctx.user.id;
+      
+      // Non-admin users cannot view other users' data
+      if (ctx.user.role !== "admin" && targetUserId !== ctx.user.id) {
+        throw new Error("Access denied: You can only view your own time entries");
       }
+      
+      conditions.push(eq(timeEntries.userId, targetUserId));
 
       if (input.projectId) {
         conditions.push(eq(timeEntries.projectId, input.projectId));
@@ -325,12 +330,17 @@ export const timeEntriesRouter = router({
 
       const conditions = [];
 
+      // Determine which user's summary to show
       // Non-admin users can only see their own summary
-      if (ctx.user.role !== "admin") {
-        conditions.push(eq(timeEntries.userId, ctx.user.id));
-      } else if (input.userId) {
-        conditions.push(eq(timeEntries.userId, input.userId));
+      // Admins see their own summary by default, but can specify another userId
+      const targetUserId = input.userId || ctx.user.id;
+      
+      // Non-admin users cannot view other users' data
+      if (ctx.user.role !== "admin" && targetUserId !== ctx.user.id) {
+        throw new Error("Access denied: You can only view your own summary");
       }
+      
+      conditions.push(eq(timeEntries.userId, targetUserId));
 
       if (input.month && input.month > 0 && input.year) {
         // Specific month and year

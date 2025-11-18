@@ -12,11 +12,20 @@ export const projectsRouter = router({
       z.object({
         year: z.number().optional(),
         status: z.enum(["active", "archived"]).optional(),
+        userId: z.number().optional(), // Admin can view another user's quota data
       })
     )
     .query(async ({ input, ctx }) => {
       const db = await getDb();
       if (!db) throw new Error("Database not available");
+      
+      // Determine which user's quota data to show
+      const targetUserId = input.userId || ctx.user.id;
+      
+      // Non-admin users cannot view other users' data
+      if (ctx.user.role !== "admin" && targetUserId !== ctx.user.id) {
+        throw new Error("Access denied: You can only view your own project data");
+      }
       
       let query = db.select().from(projects);
       const conditions = [];
@@ -46,7 +55,7 @@ export const projectsRouter = router({
             .where(
               and(
                 eq(timeEntries.projectId, project.id),
-                eq(timeEntries.userId, ctx.user.id)
+                eq(timeEntries.userId, targetUserId)
               )
             );
 
@@ -65,7 +74,7 @@ export const projectsRouter = router({
             .where(
               and(
                 eq(userProjectQuotas.projectId, project.id),
-                eq(userProjectQuotas.userId, ctx.user.id)
+                eq(userProjectQuotas.userId, targetUserId)
               )
             )
             .limit(1);

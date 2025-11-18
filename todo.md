@@ -185,3 +185,15 @@
 - [x] Implement PDF generation backend endpoint
 - [x] Add export button to Time Entries page
 - [x] Test PDF export with real data
+
+## Admin User View Switcher
+- [x] Change default behavior: admins see only their own time entries by default (not all users)
+- [x] Create user switcher dropdown component for admins
+- [x] Add "View as User" selector to dashboard header
+- [x] Update backend queries to accept optional viewAsUserId parameter
+- [x] Update dashboard to show selected user's data
+- [x] Update time entries page to show selected user's data
+- [x] Update projects page quota display for selected user
+- [x] Persist selected user in session/state
+- [x] Add visual indicator showing which user's data is being viewed
+- [x] Test switching between users and verify data isolation

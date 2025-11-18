@@ -211,3 +211,10 @@
 - [x] Ensure clean table styling and layout
 - [x] Display total hours row at the end of the table
 - [x] Test updated PDF report
+
+## Dark Mode Support
+- [x] Enable switchable theme in App.tsx ThemeProvider
+- [x] Update CSS variables in index.css for dark mode
+- [x] Add theme toggle button to DashboardLayout
+- [x] Test dark mode across all pages (Dashboard, Time Entries, Projects, etc.)
+- [x] Ensure proper contrast and readability in dark mode

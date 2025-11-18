@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "timestamp": "2025-11-13T07:30:19.078Z",
+  "timestamp": "2025-11-16T20:23:16.243Z",
   "tables": {
     "users": [
       {
@@ -13,8 +13,21 @@
         "loginMethod": "google",
         "role": "admin",
         "createdAt": "2025-11-12T13:13:10.000Z",
-        "updatedAt": "2025-11-13T07:29:35.000Z",
-        "lastSignedIn": "2025-11-13T07:29:36.000Z"
+        "updatedAt": "2025-11-16T20:22:25.000Z",
+        "lastSignedIn": "2025-11-16T20:22:26.000Z"
+      },
+      {
+        "id": 660009,
+        "openId": "local:celso",
+        "username": "celso",
+        "passwordHash": "$2b$10$g5C45idZWq3qOYzeTLEG9eRiYrr1.SSuttLLSbswQQXfITOu8etz.",
+        "name": "Celso Cattaneo",
+        "email": "celso.cattaneo@schwyz-next.ch",
+        "loginMethod": "local",
+        "role": "user",
+        "createdAt": "2025-11-13T07:32:31.000Z",
+        "updatedAt": "2025-11-16T20:22:18.000Z",
+        "lastSignedIn": "2025-11-16T20:22:19.000Z"
       }
     ],
     "projects": [
@@ -77,6 +90,18 @@
         "status": "active",
         "createdAt": "2025-11-12T22:29:32.000Z",
         "updatedAt": "2025-11-12T22:29:32.000Z"
+      },
+      {
+        "id": 120001,
+        "name": "GMI 2.0 VorNRP",
+        "hourlyRate": 55,
+        "vatType": "inclusive",
+        "totalQuotaHours": 24,
+        "warningThreshold": 80,
+        "year": 2025,
+        "status": "active",
+        "createdAt": "2025-11-13T08:54:00.000Z",
+        "updatedAt": "2025-11-13T08:54:00.000Z"
       }
     ],
     "categories": [
@@ -795,16 +820,30 @@
         "kilometers": null,
         "createdAt": "2025-11-12T22:30:49.000Z",
         "updatedAt": "2025-11-12T22:30:49.000Z"
+      },
+      {
+        "id": 180001,
+        "userId": 1,
+        "projectId": 120001,
+        "categoryId": 1,
+        "date": "2025-11-13T00:00:00.000Z",
+        "startTime": "08:30",
+        "endTime": "10:00",
+        "durationHours": 150,
+        "description": "Prep, Budget anpassungen NH, Calls, GMI 2.0 Persona review und Shared IP review ",
+        "kilometers": null,
+        "createdAt": "2025-11-13T08:55:17.000Z",
+        "updatedAt": "2025-11-13T08:55:17.000Z"
       }
     ],
     "invoices": [],
     "invoiceItems": []
   },
   "stats": {
-    "users": 1,
-    "projects": 5,
+    "users": 2,
+    "projects": 6,
     "categories": 10,
-    "timeEntries": 46,
+    "timeEntries": 47,
     "invoices": 0,
     "invoiceItems": 0
   }

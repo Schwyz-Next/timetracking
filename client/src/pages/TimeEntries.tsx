@@ -35,7 +35,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
-import { Plus, Edit, Trash2, Calendar, Clock } from "lucide-react";
+import { Plus, Edit, Trash2, Calendar, Clock, Download } from "lucide-react";
 import { toast } from "sonner";
 import DashboardLayout from "@/components/DashboardLayout";
 import { format } from "date-fns";
@@ -113,6 +113,35 @@ export default function TimeEntries() {
     },
   });
 
+  const exportPDF = trpc.timeReports.exportMonthlyPDF.useMutation({
+    onSuccess: (data) => {
+      // Convert base64 to blob and download
+      const blob = new Blob(
+        [Uint8Array.from(atob(data.pdf), c => c.charCodeAt(0))],
+        { type: "application/pdf" }
+      );
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = data.filename;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      toast.success("PDF report generated successfully");
+    },
+    onError: (error) => {
+      toast.error(error.message || "Failed to generate PDF");
+    },
+  });
+
+  const handleExportPDF = () => {
+    exportPDF.mutate({
+      year: selectedYear,
+      month: selectedMonth,
+    });
+  };
+
   const resetForm = () => {
     setFormData({
       projectId: "",
@@ -183,16 +212,26 @@ export default function TimeEntries() {
             <h1 className="text-3xl font-bold">Time Entries</h1>
             <p className="text-muted-foreground">Track your working hours</p>
           </div>
-          <Button
-            onClick={() => {
-              resetForm();
-              setEditingEntry(null);
-              setIsCreateDialogOpen(true);
-            }}
-          >
-            <Plus className="h-4 w-4 mr-2" />
-            Add Entry
-          </Button>
+          <div className="flex gap-2">
+            <Button
+              variant="outline"
+              onClick={handleExportPDF}
+              disabled={exportPDF.isPending}
+            >
+              <Download className="h-4 w-4 mr-2" />
+              {exportPDF.isPending ? "Generating..." : "Export PDF"}
+            </Button>
+            <Button
+              onClick={() => {
+                resetForm();
+                setEditingEntry(null);
+                setIsCreateDialogOpen(true);
+              }}
+            >
+              <Plus className="h-4 w-4 mr-2" />
+              Add Entry
+            </Button>
+          </div>
         </div>
 
         <Card>

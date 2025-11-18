@@ -179,3 +179,9 @@
 - [x] Add "Manage Quotas" button to Projects page
 - [x] Test quota assignment through UI
 - [x] Fix Projects page quota warning boxes to show individual user quota percentage, not total project percentage
+- [x] Verified dashboard quota exceeded alert correctly counts projects where user exceeded their individual quota
+## Time Report Export
+- [x] Design monthly time report structure (header, summary, detailed entries, totals)
+- [x] Implement PDF generation backend endpoint
+- [x] Add export button to Time Entries page
+- [x] Test PDF export with real data

@@ -1,0 +1,46 @@
+{
+  "query": "SELECT \n  p.name,\n  COALESCE(SUM(te.durationHours), 0) / 100 as userHours,\n  COALESCE(upq.quotaHours, p.totalQuotaHours) as userQuota,\n  (COALESCE(SUM(te.durationHours), 0) / 100) / COALESCE(upq.quotaHours, p.totalQuotaHours) * 100 as percentage\nFROM projects p\nLEFT JOIN timeEntries te ON te.projectId = p.id AND te.userId = (SELECT id FROM users WHERE openId LIKE '%vikram%' LIMIT 1)\nLEFT JOIN userProjectQuotas upq ON upq.projectId = p.id AND upq.userId = (SELECT id FROM users WHERE openId LIKE '%vikram%' LIMIT 1)\nWHERE p.status = 'active'\nGROUP BY p.id, p.name, p.totalQuotaHours, upq.quotaHours\nORDER BY percentage DESC;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user AwGvLACcNJJUAmU.2fefbe8204f3 --database Miyi8dMEHsq6BSut9VsF2X --execute SELECT \n  p.name,\n  COALESCE(SUM(te.durationHours), 0) / 100 as userHours,\n  COALESCE(upq.quotaHours, p.totalQuotaHours) as userQuota,\n  (COALESCE(SUM(te.durationHours), 0) / 100) / COALESCE(upq.quotaHours, p.totalQuotaHours) * 100 as percentage\nFROM projects p\nLEFT JOIN timeEntries te ON te.projectId = p.id AND te.userId = (SELECT id FROM users WHERE openId LIKE '%vikram%' LIMIT 1)\nLEFT JOIN userProjectQuotas upq ON upq.projectId = p.id AND upq.userId = (SELECT id FROM users WHERE openId LIKE '%vikram%' LIMIT 1)\nWHERE p.status = 'active'\nGROUP BY p.id, p.name, p.totalQuotaHours, upq.quotaHours\nORDER BY percentage DESC;",
+  "rows": [
+    {
+      "name": "GMI 2.0 VorNRP",
+      "userHours": "0.0000",
+      "userQuota": "24",
+      "percentage": "0.00000000"
+    },
+    {
+      "name": "NRP CSEM",
+      "userHours": "0.0000",
+      "userQuota": "39",
+      "percentage": "0.00000000"
+    },
+    {
+      "name": "Geschäftsführung",
+      "userHours": "0.0000",
+      "userQuota": "60",
+      "percentage": "0.00000000"
+    },
+    {
+      "name": "Tag des Gründes mit IFJ",
+      "userHours": "0.0000",
+      "userQuota": "7",
+      "percentage": "0.00000000"
+    },
+    {
+      "name": "NRP Nachhaltigkeit",
+      "userHours": "0.0000",
+      "userQuota": "24",
+      "percentage": "0.00000000"
+    },
+    {
+      "name": "Hackathon",
+      "userHours": "0.0000",
+      "userQuota": "100",
+      "percentage": "0.00000000"
+    }
+  ],
+  "messages": [],
+  "stdout": "name\tuserHours\tuserQuota\tpercentage\nGMI 2.0 VorNRP\t0.0000\t24\t0.00000000\nNRP CSEM\t0.0000\t39\t0.00000000\nGeschäftsführung\t0.0000\t60\t0.00000000\nTag des Gründes mit IFJ\t0.0000\t7\t0.00000000\nNRP Nachhaltigkeit\t0.0000\t24\t0.00000000\nHackathon\t0.0000\t100\t0.00000000\n",
+  "stderr": "",
+  "execution_time_ms": 57
+}

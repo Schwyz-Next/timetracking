@@ -1,0 +1,16 @@
+{
+  "query": "SELECT \n  COUNT(*) as total_entries,\n  SUM(durationHours) / 100 as total_hours,\n  MIN(date) as earliest_date,\n  MAX(date) as latest_date\nFROM timeEntries \nWHERE userId = (SELECT id FROM users WHERE openId LIKE '%vikram%' LIMIT 1)\n  AND date >= '2025-10-01' \n  AND date < '2025-11-01';",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user AwGvLACcNJJUAmU.2fefbe8204f3 --database Miyi8dMEHsq6BSut9VsF2X --execute SELECT \n  COUNT(*) as total_entries,\n  SUM(durationHours) / 100 as total_hours,\n  MIN(date) as earliest_date,\n  MAX(date) as latest_date\nFROM timeEntries \nWHERE userId = (SELECT id FROM users WHERE openId LIKE '%vikram%' LIMIT 1)\n  AND date >= '2025-10-01' \n  AND date < '2025-11-01';",
+  "rows": [
+    {
+      "total_entries": "0",
+      "total_hours": "NULL",
+      "earliest_date": "NULL",
+      "latest_date": "NULL"
+    }
+  ],
+  "messages": [],
+  "stdout": "total_entries\ttotal_hours\tearliest_date\tlatest_date\n0\tNULL\tNULL\tNULL\n",
+  "stderr": "",
+  "execution_time_ms": 719
+}

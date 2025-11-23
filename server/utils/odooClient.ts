@@ -146,7 +146,6 @@ export class OdooClient {
     try {
       const result = await this.execute("res.partner", "search", [
         [["name", "ilike", name]],
-        { limit: 1 },
       ]);
       return result && result.length > 0 ? result[0] : null;
     } catch (error) {
@@ -162,7 +161,6 @@ export class OdooClient {
     try {
       const result = await this.execute("res.company", "search", [
         [["name", "=", name]],
-        { limit: 1 },
       ]);
       return result && result.length > 0 ? result[0] : null;
     } catch (error) {

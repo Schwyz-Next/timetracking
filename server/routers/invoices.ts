@@ -287,6 +287,68 @@ export const invoicesRouter = router({
       return { success: true };
     }),
 
+  // Manually sync invoice to Odoo
+  syncToOdoo: protectedProcedure
+    .input(z.object({ id: z.number() }))
+    .mutation(async ({ input, ctx }) => {
+      const db = await getDb();
+      if (!db) throw new Error("Database not available");
+
+      // Check ownership
+      const existing = await db
+        .select()
+        .from(invoices)
+        .where(eq(invoices.id, input.id))
+        .limit(1);
+
+      if (!existing[0]) {
+        throw new Error("Invoice not found");
+      }
+
+      if (ctx.user.role !== "admin" && existing[0].userId !== ctx.user.id) {
+        throw new Error("Access denied");
+      }
+
+      const { createOdooInvoice } = await import("../services/odooInvoiceService");
+      
+      // Get invoice items with project details
+      const items = await db
+        .select({
+          item: invoiceItems,
+          project: projects,
+        })
+        .from(invoiceItems)
+        .leftJoin(projects, eq(invoiceItems.projectId, projects.id))
+        .where(eq(invoiceItems.invoiceId, input.id));
+
+      // Prepare line items for Odoo
+      const lineItems = items.map((item) => ({
+        projectName: item.project?.name || "Unknown Project",
+        hours: item.item.hours / 100, // Convert from stored format
+        rate: item.item.rate / 100, // Convert from stored format
+        amount: item.item.amount / 100, // Convert from stored format
+      }));
+
+      // Create invoice in Odoo
+      const odooResult = await createOdooInvoice({
+        userId: existing[0].userId,
+        invoiceNumber: existing[0].invoiceNumber,
+        recipientName: existing[0].recipientName,
+        invoiceDate: existing[0].createdAt,
+        lineItems,
+      });
+
+      if (!odooResult.success) {
+        throw new Error(odooResult.message);
+      }
+
+      return { 
+        success: true,
+        message: odooResult.message,
+        odooInvoiceId: odooResult.odooInvoiceId 
+      };
+    }),
+
   // Delete an invoice
   delete: protectedProcedure
     .input(z.object({ id: z.number() }))

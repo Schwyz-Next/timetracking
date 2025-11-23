@@ -232,3 +232,11 @@
 - [x] Create invoice under company "Schwyz Next"
 - [x] Handle invoice line items with time entry details
 - [x] Test Odoo integration with provided credentials
+
+## Odoo Invoice Creation Debugging
+- [x] Check server logs for Odoo API errors during invoice creation
+- [x] Verify invoice data is being sent correctly to Odoo
+- [x] Add manual "Sync to Odoo" button to invoices
+- [x] Add syncToOdoo mutation to backend
+- [x] Test manual Odoo sync and confirm invoice appears in Odoo
+- [x] Add user feedback for Odoo sync success/failures

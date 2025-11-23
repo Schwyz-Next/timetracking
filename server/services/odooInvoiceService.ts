@@ -23,8 +23,10 @@ export async function createOdooInvoice(invoiceData: InvoiceData): Promise<{
   message: string;
 }> {
   try {
+    console.log('[Odoo] Creating invoice for user:', invoiceData.userId);
     // Get user's Odoo configuration
     const config = await getOdooConfig(invoiceData.userId);
+    console.log('[Odoo] Config found:', config ? 'Yes' : 'No', config?.isActive ? '(active)' : '(inactive)');
     
     if (!config || !config.isActive) {
       return {
@@ -41,17 +43,21 @@ export async function createOdooInvoice(invoiceData: InvoiceData): Promise<{
       apiKey: config.apiKey,
     });
 
-    // Find company "Schwyz Next"
-    const companyId = await client.findCompany("Schwyz Next");
+    // Find company "World Wide Services Group Ltd."
+    console.log('[Odoo] Searching for company: World Wide Services Group Ltd.');
+    const companyId = await client.findCompany("World Wide Services Group Ltd.");
+    console.log('[Odoo] Company ID:', companyId);
     if (!companyId) {
       return {
         success: false,
-        message: "Company 'Schwyz Next' not found in Odoo",
+        message: "Company 'World Wide Services Group Ltd.' not found in Odoo",
       };
     }
 
     // Find or get partner (customer) by name
+    console.log('[Odoo] Searching for partner:', invoiceData.recipientName);
     let partnerId = await client.findPartner(invoiceData.recipientName);
+    console.log('[Odoo] Partner ID:', partnerId);
     
     if (!partnerId) {
       return {
@@ -77,7 +83,9 @@ export async function createOdooInvoice(invoiceData: InvoiceData): Promise<{
       company_id: companyId, // Set company to Schwyz Next
     };
 
+    console.log('[Odoo] Creating invoice with data:', JSON.stringify(odooInvoice, null, 2));
     const odooInvoiceId = await client.createInvoice(odooInvoice);
+    console.log('[Odoo] Invoice created with ID:', odooInvoiceId);
 
     return {
       success: true,

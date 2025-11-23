@@ -35,7 +35,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
-import { Plus, FileText, Trash2, Eye } from "lucide-react";
+import { Plus, FileText, Trash2, Eye, Cloud } from "lucide-react";
 import { toast } from "sonner";
 import DashboardLayout from "@/components/DashboardLayout";
 import { format } from "date-fns";
@@ -44,6 +44,7 @@ export default function Invoices() {
   const [isGenerateDialogOpen, setIsGenerateDialogOpen] = useState(false);
   const [isPreviewDialogOpen, setIsPreviewDialogOpen] = useState(false);
   const [selectedInvoiceId, setSelectedInvoiceId] = useState<number | null>(null);
+  const [isSyncing, setIsSyncing] = useState<number | null>(null);
   const [formData, setFormData] = useState({
     month: (new Date().getMonth() + 1).toString(),
     year: new Date().getFullYear().toString(),
@@ -101,6 +102,17 @@ export default function Invoices() {
     },
   });
 
+  const syncToOdoo = trpc.invoices.syncToOdoo.useMutation({
+    onSuccess: (data) => {
+      setIsSyncing(null);
+      toast.success(data.message || "Invoice synced to Odoo successfully");
+    },
+    onError: (error) => {
+      setIsSyncing(null);
+      toast.error(`Failed to sync to Odoo: ${error.message}`);
+    },
+  });
+
   const resetForm = () => {
     setFormData({
       month: (new Date().getMonth() + 1).toString(),
@@ -125,6 +137,11 @@ export default function Invoices() {
     if (confirm("Are you sure you want to delete this invoice?")) {
       deleteInvoice.mutate({ id });
     }
+  };
+
+  const handleSyncToOdoo = (id: number) => {
+    setIsSyncing(id);
+    syncToOdoo.mutate({ id });
   };
 
   const handleViewDetails = (id: number) => {
@@ -248,14 +265,25 @@ export default function Invoices() {
                               variant="ghost"
                               size="sm"
                               onClick={() => handleViewDetails(invoice.id)}
+                              title="View Details"
                             >
                               <Eye className="h-4 w-4" />
                             </Button>
                             <Button
                               variant="ghost"
                               size="sm"
+                              onClick={() => handleSyncToOdoo(invoice.id)}
+                              disabled={isSyncing === invoice.id}
+                              title="Sync to Odoo"
+                            >
+                              <Cloud className={`h-4 w-4 ${isSyncing === invoice.id ? 'animate-pulse' : ''}`} />
+                            </Button>
+                            <Button
+                              variant="ghost"
+                              size="sm"
                               onClick={() => handleDelete(invoice.id)}
                               disabled={invoice.status === "paid"}
+                              title="Delete Invoice"
                             >
                               <Trash2 className="h-4 w-4 text-destructive" />
                             </Button>

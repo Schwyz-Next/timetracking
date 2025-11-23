@@ -13,6 +13,7 @@ import Invoices from "./pages/Invoices";
 import Users from "./pages/Users";
 import AuditLogs from "./pages/AuditLogs";
 import Login from "./pages/Login";
+import OdooSettings from "./pages/OdooSettings";
 
 function Router() {
   // make sure to consider if you need authentication for certain routes
@@ -26,6 +27,7 @@ function Router() {
       <Route path="/invoices" component={Invoices} />
       <Route path="/users" component={Users} />
       <Route path="/audit-logs" component={AuditLogs} />
+      <Route path="/odoo-settings" component={OdooSettings} />
       <Route path={"/404"} component={NotFound} />
       {/* Final fallback route */}
       <Route component={NotFound} />

@@ -90,3 +90,46 @@ export async function getUserByOpenId(openId: string) {
 }
 
 // TODO: add feature queries here as your schema grows.
+
+// Odoo configuration helpers
+export async function getOdooConfig(userId: number) {
+  const db = await getDb();
+  if (!db) {
+    console.warn("[Database] Cannot get Odoo config: database not available");
+    return undefined;
+  }
+
+  const { odooConfigurations } = await import("../drizzle/schema");
+  const result = await db.select().from(odooConfigurations).where(eq(odooConfigurations.userId, userId)).limit(1);
+  return result.length > 0 ? result[0] : undefined;
+}
+
+export async function upsertOdooConfig(config: {
+  userId: number;
+  odooUrl: string;
+  username: string;
+  apiKey: string;
+  database: string;
+  isActive?: number;
+  lastTestedAt?: Date;
+}) {
+  const db = await getDb();
+  if (!db) {
+    console.warn("[Database] Cannot upsert Odoo config: database not available");
+    return;
+  }
+
+  const { odooConfigurations } = await import("../drizzle/schema");
+  
+  await db.insert(odooConfigurations).values(config).onDuplicateKeyUpdate({
+    set: {
+      odooUrl: config.odooUrl,
+      username: config.username,
+      apiKey: config.apiKey,
+      database: config.database,
+      isActive: config.isActive ?? 1,
+      lastTestedAt: config.lastTestedAt,
+      updatedAt: new Date(),
+    },
+  });
+}

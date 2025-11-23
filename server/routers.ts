@@ -11,6 +11,7 @@ import { localAuthRouter } from "./routers/localAuth";
 import { auditLogsRouter } from "./routers/auditLogs";
 import { userProjectQuotasRouter } from "./routers/userProjectQuotas";
 import { timeReportsRouter } from "./routers/timeReports";
+import { odooRouter } from "./routers/odoo";
 
 export const appRouter = router({
     // if you need to use socket.io, read and register route in server/_core/index.ts, all api should start with '/api/' so that the gateway can route correctly
@@ -36,6 +37,7 @@ export const appRouter = router({
   auditLogs: auditLogsRouter,
   userProjectQuotas: userProjectQuotasRouter,
   timeReports: timeReportsRouter,
+  odoo: odooRouter,
 });
 
 export type AppRouter = typeof appRouter;

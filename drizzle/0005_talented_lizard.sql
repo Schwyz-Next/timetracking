@@ -1,0 +1,1 @@
+ALTER TABLE `odooConfigurations` ADD `username` varchar(100) NOT NULL;

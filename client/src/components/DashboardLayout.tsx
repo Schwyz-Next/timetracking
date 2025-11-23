@@ -22,7 +22,7 @@ import {
 import { APP_LOGO, APP_TITLE, getLoginUrl } from "@/const";
 import { useIsMobile } from "@/hooks/useMobile";
 import { useTheme } from "@/contexts/ThemeContext";
-import { LayoutDashboard, LogOut, PanelLeft, Users, Clock, FolderKanban, FileText, Settings, FileSearch, Moon, Sun } from "lucide-react";
+import { LayoutDashboard, LogOut, PanelLeft, Users, Clock, FolderKanban, FileText, Settings, FileSearch, Moon, Sun, Link2 } from "lucide-react";
 import { CSSProperties, useEffect, useRef, useState } from "react";
 import { useLocation } from "wouter";
 import { DashboardLayoutSkeleton } from './DashboardLayoutSkeleton';
@@ -36,6 +36,7 @@ const menuItems = [
   { icon: Users, label: "Users", path: "/users", adminOnly: true },
   { icon: FileSearch, label: "Audit Logs", path: "/audit-logs", adminOnly: true },
   { icon: Settings, label: "Settings", path: "/settings" },
+  { icon: Link2, label: "Odoo Integration", path: "/odoo-settings" },
 ];
 
 const SIDEBAR_WIDTH_KEY = "sidebar-width";

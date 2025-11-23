@@ -139,3 +139,20 @@ export const auditLogs = mysqlTable("auditLogs", {
 
 export type AuditLog = typeof auditLogs.$inferSelect;
 export type InsertAuditLog = typeof auditLogs.$inferInsert;
+
+// Odoo configuration table - stores Odoo connection settings per user
+export const odooConfigurations = mysqlTable("odooConfigurations", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull().unique(), // One configuration per user
+  odooUrl: varchar("odooUrl", { length: 255 }).notNull(), // Odoo instance URL
+  username: varchar("username", { length: 100 }).notNull(), // Odoo username
+  apiKey: varchar("apiKey", { length: 255 }).notNull(), // Odoo API key
+  database: varchar("database", { length: 100 }).notNull(), // Odoo database name
+  isActive: int("isActive").default(1).notNull(), // 1 = active, 0 = inactive
+  lastTestedAt: timestamp("lastTestedAt"), // Last successful connection test
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type OdooConfiguration = typeof odooConfigurations.$inferSelect;
+export type InsertOdooConfiguration = typeof odooConfigurations.$inferInsert;

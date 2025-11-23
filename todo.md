@@ -218,3 +218,17 @@
 - [x] Add theme toggle button to DashboardLayout
 - [x] Test dark mode across all pages (Dashboard, Time Entries, Projects, etc.)
 - [x] Ensure proper contrast and readability in dark mode
+
+## Odoo Integration
+- [x] Create database schema for user Odoo configuration (URL, username, API key, database name)
+- [x] Implement Odoo XML-RPC API client
+- [x] Add connection test functionality
+- [x] Create Settings page UI for Odoo configuration
+- [x] Add form fields for Odoo URL, username, API key, and database name
+- [x] Implement "Test Connection" button
+- [x] Save Odoo configuration per user
+- [x] Implement automatic invoice creation in Odoo when invoice status is "draft"
+- [x] Map invoice fields correctly (customer, line items, dates, amounts)
+- [x] Create invoice under company "Schwyz Next"
+- [x] Handle invoice line items with time entry details
+- [x] Test Odoo integration with provided credentials

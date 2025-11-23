@@ -247,6 +247,43 @@ export const invoicesRouter = router({
         .set({ status: input.status })
         .where(eq(invoices.id, input.id));
 
+      // If status is set to draft, create invoice in Odoo
+      if (input.status === "draft") {
+        const { createOdooInvoice } = await import("../services/odooInvoiceService");
+        
+        // Get invoice items with project details
+        const items = await db
+          .select({
+            item: invoiceItems,
+            project: projects,
+          })
+          .from(invoiceItems)
+          .leftJoin(projects, eq(invoiceItems.projectId, projects.id))
+          .where(eq(invoiceItems.invoiceId, input.id));
+
+        // Prepare line items for Odoo
+        const lineItems = items.map((item) => ({
+          projectName: item.project?.name || "Unknown Project",
+          hours: item.item.hours / 100, // Convert from stored format
+          rate: item.item.rate / 100, // Convert from stored format
+          amount: item.item.amount / 100, // Convert from stored format
+        }));
+
+        // Create invoice in Odoo
+        const odooResult = await createOdooInvoice({
+          userId: existing[0].userId,
+          invoiceNumber: existing[0].invoiceNumber,
+          recipientName: existing[0].recipientName,
+          invoiceDate: existing[0].createdAt,
+          lineItems,
+        });
+
+        if (!odooResult.success) {
+          console.error("Failed to create Odoo invoice:", odooResult.message);
+          // Don't throw error, just log it - invoice status update should still succeed
+        }
+      }
+
       return { success: true };
     }),
 
